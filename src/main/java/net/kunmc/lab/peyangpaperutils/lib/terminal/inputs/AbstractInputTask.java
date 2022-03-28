@@ -20,7 +20,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 入力のタスク
+ * 入力のタスクです。
  */
 @Getter
 @EqualsAndHashCode

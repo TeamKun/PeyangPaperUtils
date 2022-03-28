@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * ターミナル関係のクラスです。
+ * ターミナルを取得するためのクラスです。
  */
 public class Terminals
 {
