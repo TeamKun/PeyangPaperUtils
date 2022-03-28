@@ -63,6 +63,11 @@ public interface Terminal
     void write(@NotNull Component component);
 
     /**
+     * プレイヤかどうかを返します。
+     */
+    boolean isPlayer();
+
+    /**
      * プログレスバーを新規作成します。
      *
      * @return プログレスバー
@@ -190,6 +195,12 @@ public interface Terminal
             public void write(@NotNull Component component)
             {
 
+            }
+
+            @Override
+            public boolean isPlayer()
+            {
+                return Terminal.this.isPlayer();
             }
 
             @Override

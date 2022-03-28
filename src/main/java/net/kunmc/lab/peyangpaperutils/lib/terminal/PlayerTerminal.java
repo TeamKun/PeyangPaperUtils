@@ -36,6 +36,12 @@ public class PlayerTerminal extends AbstractBukkitTerminal
     }
 
     @Override
+    public boolean isPlayer()
+    {
+        return true;
+    }
+
+    @Override
     public @NotNull Progressbar createProgressbar(@NotNull String name) throws IllegalStateException
     {
         if (progressbars.containsKey(name))

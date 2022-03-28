@@ -21,6 +21,12 @@ public class ConsoleTerminal extends AbstractBukkitTerminal
         super(Bukkit.getConsoleSender());
     }
 
+    @Override
+    public boolean isPlayer()
+    {
+        return false;
+    }
+
     /**
      * コンソールではサポートしていません。
      */
