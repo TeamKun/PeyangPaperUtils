@@ -21,27 +21,27 @@ public abstract class AbstractBukkitTerminal implements Terminal
     }
 
     @Override
-    public void info(@NotNull String message)
+    public void info(@NotNull String message, Object... args)
     {
-        writeLine(ChatColor.BLUE + "I: " + message);
+        writeLine(String.format(ChatColor.BLUE + "I: " + message, args));
     }
 
     @Override
-    public void error(@NotNull String message)
+    public void error(@NotNull String message, Object... args)
     {
-        writeLine(ChatColor.RED + "E: " + message);
+        writeLine(String.format(ChatColor.RED + "E: " + message, args));
     }
 
     @Override
-    public void success(@NotNull String message)
+    public void success(@NotNull String message, Object... args)
     {
-        writeLine(ChatColor.GREEN + "S: " + message);
+        writeLine(String.format(ChatColor.GREEN + "S: " + message, args));
     }
 
     @Override
-    public void warn(@NotNull String message)
+    public void warn(@NotNull String message, Object... args)
     {
-        writeLine(ChatColor.YELLOW + "W: " + message);
+        writeLine(String.format(ChatColor.YELLOW + "W: " + message, args));
     }
 
     @Override

@@ -26,29 +26,37 @@ public interface Terminal
      * 情報メッセージを出力します。
      *
      * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
      */
-    void info(@NotNull String message);
+    void info(@NotNull String message, Object... args);
 
     /**
      * エラーメッセージを出力します。
      *
      * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
      */
-    void error(@NotNull String message);
+    void error(@NotNull String message, Object... args);
 
     /**
      * 成功メッセージを出力します。
      *
      * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
      */
-    void success(@NotNull String message);
+    void success(@NotNull String message, Object... args);
 
     /**
      * 警告メッセージを出力します。
      *
      * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
      */
-    void warn(@NotNull String message);
+    void warn(@NotNull String message, Object... args);
 
     /**
      * メッセージを改行して出力します。
@@ -151,7 +159,7 @@ public interface Terminal
 
     /**
      * 静かなモードにします。
-     * このモードを有効にしたターミナルでは、{@link #info(String message)}をはじめとする出力系メソッドは文字列を出力しないようにしてください。
+     * このモードを有効にしたターミナルでは、{@link #info(String message, Object... args)} をはじめとする出力系メソッドは文字列を出力しないようにしてください。
      *
      * @return IOInterfaceのコピー
      */
@@ -166,25 +174,25 @@ public interface Terminal
             }
 
             @Override
-            public void info(@NotNull String message)
+            public void info(@NotNull String message, Object... args)
             {
 
             }
 
             @Override
-            public void error(@NotNull String message)
+            public void error(@NotNull String message, Object... args)
             {
 
             }
 
             @Override
-            public void success(@NotNull String message)
+            public void success(@NotNull String message, Object... args)
             {
 
             }
 
             @Override
-            public void warn(@NotNull String message)
+            public void warn(@NotNull String message, Object... args)
             {
 
             }
