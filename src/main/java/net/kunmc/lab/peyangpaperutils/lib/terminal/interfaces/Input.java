@@ -11,6 +11,8 @@ public interface Input
 {
     /**
      * ターミナルのインスタンスを取得します。
+     *
+     * @return ターミナルのインスタンス
      */
     @NotNull
     Terminal getTerminal();
@@ -26,8 +28,9 @@ public interface Input
 
     /**
      * キャンセル可能な、Y/N(yes/no)で回答できる質問を表示します。
-     * また、キャンセルされた場合は値に{@code null}が収納されます。     * @param question 質問内容
+     * また、キャンセルされた場合は値に{@code null}が収納されます。
      *
+     * @param question 質問内容
      * @return 回答
      */
     @NotNull
@@ -64,6 +67,8 @@ public interface Input
 
     /**
      * 質問募集をキャンセルします。
+     *
+     * @param task 質問のタスク
      */
     void cancelQuestion(InputTask task);
 }

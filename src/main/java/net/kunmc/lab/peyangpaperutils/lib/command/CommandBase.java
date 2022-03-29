@@ -317,8 +317,9 @@ public abstract class CommandBase
     /**
      * コマンドのハンドラです。
      *
-     * @param sender コマンド実行者
-     * @param args   コマンド引数
+     * @param sender   コマンド実行者
+     * @param terminal ターミナル
+     * @param args     コマンド引数
      */
     public abstract void onCommand(@NotNull CommandSender sender, @NotNull Terminal terminal, String[] args);
 
@@ -326,6 +327,7 @@ public abstract class CommandBase
      * タブ補完のハンドラです。
      *
      * @param sender コマンド実行者
+     * @param terminal ターミナル
      * @param args   コマンド引数
      * @return タブ補完結果
      */

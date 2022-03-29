@@ -29,6 +29,8 @@ public interface InputTask
 
     /**
      * 回答を得られるまでブロッキングします。
+     *
+     * @throws InterruptedException スレッドが殺された場合
      */
     void waitForAnswer() throws InterruptedException;
 
@@ -71,6 +73,7 @@ public interface InputTask
     /**
      * 質問で有効な入力値かどうかを返します。
      *
+     * @param input 入力値
      * @return 質問で有効な入力値かどうか
      */
     boolean checkValidInput(String input);
@@ -93,6 +96,8 @@ public interface InputTask
      * 質問の選択肢を取得します。
      * Mapの鍵はクリック時に自動入力される値で、値は表示される値です。
      * デフォルトでは {@link org.bukkit.ChatColor#GREEN} 色で表示されます。
+     *
+     * @return 質問の選択肢
      */
     Map<String, String> getChoices();
 }

@@ -28,6 +28,7 @@ public abstract class SubCommandWith extends CommandBase
     /**
      * サブコマンドを返します。
      *
+     * @param sender コマンドを実行者
      * @return サブコマンド
      */
     protected abstract Map<String, CommandBase> getSubCommands(@NotNull CommandSender sender);

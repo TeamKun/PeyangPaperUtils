@@ -17,6 +17,8 @@ public interface Terminal
 
     /**
      * ターミナルの使用者を取得します。
+     *
+     * @return {@link Audience}
      */
     @NotNull Audience getAudience();
 
@@ -64,12 +66,14 @@ public interface Terminal
 
     /**
      * プレイヤかどうかを返します。
+     * @return プレイヤかどうか
      */
     boolean isPlayer();
 
     /**
      * プログレスバーを新規作成します。
      *
+     * @param name プログレスバーの名前
      * @return プログレスバー
      * @throws IllegalStateException プログレスバーが既に存在する場合
      */

@@ -95,7 +95,8 @@ public class CommandManager implements CommandExecutor, TabCompleter
     /**
      * コマンドを登録します。
      *
-     * @param command コマンド
+     * @param commandName コマンド名
+     * @param command     コマンド
      */
     public void registerCommand(@NotNull String commandName, @NotNull CommandBase command)
     {
