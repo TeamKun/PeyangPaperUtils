@@ -1,10 +1,13 @@
-package net.kunmc.lab.peyangpaperutils.lib.terminal.inputs;
+package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Value;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Input;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Question;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.QuestionAttribute;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.QuestionResult;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -15,6 +18,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,54 +29,64 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Getter
 @EqualsAndHashCode
-abstract class AbstractQuestion implements Question
+public class QuestionImplement implements Question
 {
     private final UUID uuid;
     private final UUID target;
     private final Input input;
     private final String question;
+    private final QuestionAttribute[] attributes;
+    private final Map<String, String> choices;
+    private String value;
 
     @Getter(AccessLevel.PRIVATE)
     private final Object locker;
-
-    private String value;
     @Getter(AccessLevel.PRIVATE)
     private boolean valuePresent;
+    @Getter(AccessLevel.PRIVATE)
+    private QuestionResult result;
 
-    public AbstractQuestion(@NotNull Audience target, @NotNull String question, @NotNull Input input)
+    public QuestionImplement(@NotNull Audience target, @NotNull String question, @NotNull Input input, QuestionAttribute... attributes)
     {
         this.uuid = UUID.randomUUID();
         this.target = target instanceof Player ? ((Player) target).getUniqueId(): null;
         this.input = input;
         this.question = question;
+        this.attributes = attributes;
+
+        this.choices = buildChoices(attributes);
 
         this.locker = new Object();
+    }
 
-        this.value = null;
-        this.valuePresent = false;
+    private static Map<String, String> buildChoices(QuestionAttribute[] attributes)
+    {
+        HashMap<String, String> choices = new HashMap<>();
+        for (QuestionAttribute attribute : attributes)
+            choices.putAll(attribute.getChoices(choices));
+        return choices;
+    }
+
+    private QuestionAttribute[] detectValidAttributes(String input)
+    {
+        return Arrays.stream(this.attributes)
+                .filter(attribute -> attribute.isMatch(input))
+                .toArray(QuestionAttribute[]::new);
     }
 
     @Override
-    public void setValue(@NotNull String value)
+    public @NotNull QuestionResult waitAndGetResult() throws InterruptedException
     {
-        if (valuePresent)
-            throw new IllegalStateException("value is already set");
-
-        this.valuePresent = true;
-        this.value = value;
-        synchronized (locker)
-        {
-            locker.notifyAll();
-        }
+        this.waitForAnswer();
+        return this.result;
     }
 
     @Override
-    @SuppressWarnings("ConstantConditions")
-    public @NotNull String waitAndGetValue() throws InterruptedException
+    public @Nullable QuestionResult getAnswer()
     {
-        waitForAnswer();
-        return getRawValue();
+        return this.result;
     }
+
 
     @Override
     public void waitForAnswer() throws InterruptedException
@@ -86,13 +101,22 @@ abstract class AbstractQuestion implements Question
     }
 
     @Override
-    public @Nullable String getRawValue()
+    public void setAnswer(@NotNull String value)
     {
-        return value;
+        if (valuePresent)
+            throw new IllegalStateException("value is already set");
+
+        this.result = new QuestionResultIImplement(value, detectValidAttributes(value));
+        this.value = value;
+        this.valuePresent = true;
+        synchronized (locker)
+        {
+            locker.notifyAll();
+        }
     }
 
     @Override
-    public boolean isValueAvailable()
+    public boolean isResultAvailable()
     {
         return valuePresent;
     }
@@ -106,6 +130,13 @@ abstract class AbstractQuestion implements Question
         {
             locker.notifyAll();
         }
+    }
+
+    @Override
+    public boolean checkValidInput(String input)
+    {
+        return Arrays.stream(attributes)
+                .allMatch(attribute -> attribute.isValidInput(input));
     }
 
     private void printSeparator(Terminal terminal)
@@ -133,12 +164,12 @@ abstract class AbstractQuestion implements Question
         printSeparator(terminal);
         terminal.writeLine(ChatColor.GREEN + "    " + question);
 
-        if (this instanceof BasicStringInputTask)
+        /*if (this instanceof BasicStringInputTask)
         {
             terminal.writeLine("    " + ChatColor.GREEN + "回答をチャットまたはコンソールに入力してください。");
             printSeparator(terminal);
             return;
-        }
+        }*/
 
         Map<String, String> choices = getChoices();
         if (choices != null)
@@ -146,4 +177,19 @@ abstract class AbstractQuestion implements Question
 
         printSeparator(terminal);
     }
+
+    @Value
+    private static class QuestionResultIImplement implements QuestionResult
+    {
+        String rawAnswer;
+        QuestionAttribute[] validAttributes;
+
+        @Override
+        public boolean test(QuestionAttribute attribute)
+        {
+            return Arrays.stream(validAttributes)
+                    .anyMatch(validAttribute -> validAttribute.equals(attribute));
+        }
+    }
+
 }

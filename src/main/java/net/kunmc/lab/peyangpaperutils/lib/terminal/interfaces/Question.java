@@ -12,20 +12,19 @@ import java.util.UUID;
 public interface Question
 {
     /**
-     * 入力値を設定します。
-     * ブロッキングされたスレッドは解放されます。
-     *
-     * @param value 入力値
-     */
-    void setValue(@NotNull String value);
-
-    /**
-     * ブロッキングして入力値を取得します。
+     * ブロッキングして結果を取得します。
      *
      * @return 入力値
      * @throws InterruptedException 入力値が取得できなかった場合/スレッドが殺された場合
      */
-    @NotNull String waitAndGetValue() throws InterruptedException;
+    @NotNull QuestionResult waitAndGetResult() throws InterruptedException;
+
+    /**
+     * ブロッキングせずに回答を取得します。
+     *
+     * @return 回答
+     */
+    @Nullable QuestionResult getAnswer();
 
     /**
      * 回答を得られるまでブロッキングします。
@@ -35,21 +34,22 @@ public interface Question
     void waitForAnswer() throws InterruptedException;
 
     /**
-     * ブロッキングせずに入力値を取得します。
+     * 入力値を設定します。
+     * ブロッキングされたスレッドは解放されます。
      *
-     * @return 入力値
+     * @param value 入力値
      */
-    @Nullable String getRawValue();
+    void setAnswer(@NotNull String value);
 
     /**
-     * 入力値が取得できるかどうかを返します。
+     * 回答が取得できるかどうかを返します。
      *
-     * @return 入力値が取得できるかどうか
+     * @return 回答が取得できるかどうか
      */
-    boolean isValueAvailable();
+    boolean isResultAvailable();
 
     /**
-     * 入力をキャンセルしまします。
+     * 質問をキャンセルしまします。
      */
     default void cancel()
     {
@@ -64,9 +64,9 @@ public interface Question
     @NotNull UUID getUuid();
 
     /**
-     * 質問の体操者を返します。
+     * 質問のターゲットを返します。
      *
-     * @return 質問の体操者
+     * @return 質問のターゲット
      */
     @Nullable UUID getTarget();
 
@@ -100,4 +100,11 @@ public interface Question
      * @return 質問の選択肢
      */
     Map<String, String> getChoices();
+
+    /**
+     * 質問の属性を取得します。
+     *
+     * @return 質問の属性
+     */
+    QuestionAttribute[] getAttributes();
 }

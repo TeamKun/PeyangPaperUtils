@@ -66,7 +66,7 @@ public class InputManager implements Listener
             return;
         }
 
-        inputTask.setValue(message);
+        inputTask.setAnswer(message);
         inputTasks.remove(0);
         if (!inputTasks.isEmpty())
             inputTasks.get(0).printQuestion();
@@ -91,7 +91,7 @@ public class InputManager implements Listener
             return;
         }
 
-        inputTask.setValue(message);
+        inputTask.setAnswer(message);
         inputTasks.remove(0);
         if (!inputTasks.isEmpty())
             inputTasks.get(0).printQuestion();
