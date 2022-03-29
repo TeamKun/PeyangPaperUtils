@@ -1,7 +1,5 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import lombok.Getter;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Input;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Progressbar;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
@@ -18,15 +16,12 @@ public class PlayerTerminal extends AbstractBukkitTerminal
 {
     private final Player player;
     private final HashMap<String, Progressbar> progressbars;
-    @Getter
-    private final Input input;
 
     PlayerTerminal(Player player)
     {
         super(player);
         this.player = player;
         this.progressbars = new HashMap<>();
-        this.input = new InputImplement(this);
     }
 
     @Override
