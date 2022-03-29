@@ -2,7 +2,7 @@ package net.kunmc.lab.peyangpaperutils.plugin.commands.debug;
 
 import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
 import net.kunmc.lab.peyangpaperutils.lib.command.CommandBase;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.InputTask;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Question;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -30,7 +30,7 @@ public class QuestionDebugCommand extends CommandBase
         String type = args[0];
         String question = args[1];
 
-        InputTask in;
+        Question in;
 
         switch (type)
         {

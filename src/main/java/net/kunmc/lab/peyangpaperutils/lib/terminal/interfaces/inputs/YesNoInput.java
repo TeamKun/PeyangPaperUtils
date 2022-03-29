@@ -1,11 +1,11 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.inputs;
 
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.InputTask;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Question;
 
 /**
  * y(Yes,はい), N(No,いいえ) から選択する形式の入力タスクです。
  */
-public interface YesNoInput extends InputTask
+public interface YesNoInput extends Question
 {
     /**
      * スレッドをブロックして真偽値として値を取得します。

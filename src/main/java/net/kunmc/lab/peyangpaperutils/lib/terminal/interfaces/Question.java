@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * 入力(質問)のタスクです。
  */
-public interface InputTask
+public interface Question
 {
     /**
      * 入力値を設定します。
@@ -87,8 +87,8 @@ public interface InputTask
 
     /**
      * 質問を出力します。
-     * 実装時は {@link Terminal#info(String)} を使用することが望ましいです。
-     * また、{@link InputTask#getChoices()} が内部で呼び出されます。
+     * 実装時は {@link Terminal#info(String, Object...)} を使用することが望ましいです。
+     * また、{@link Question#getChoices()} が内部で呼び出されます。
      */
     void printQuestion();
 

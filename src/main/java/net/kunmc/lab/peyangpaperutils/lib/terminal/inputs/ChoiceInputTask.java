@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * 候補から選択する形式の入力タスクです。
  */
-public class ChoiceInputTask extends AbstractInputTask
+public class ChoiceInputTask extends AbstractQuestion
 {
     private final Map<String, String> choices;
 

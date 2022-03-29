@@ -24,7 +24,7 @@ public interface Input
      * @return 回答
      */
     @NotNull
-    InputTask showYNQuestion(@NotNull String question);
+    Question showYNQuestion(@NotNull String question);
 
     /**
      * キャンセル可能な、Y/N(yes/no)で回答できる質問を表示します。
@@ -34,7 +34,7 @@ public interface Input
      * @return 回答
      */
     @NotNull
-    InputTask showYNQuestionCancellable(@NotNull String question);
+    Question showYNQuestionCancellable(@NotNull String question);
 
     /**
      * 自由入力で回答できる質問を表示します。
@@ -43,7 +43,7 @@ public interface Input
      * @return 回答
      */
     @NotNull
-    InputTask showInputQuestion(@NotNull String question);
+    Question showInputQuestion(@NotNull String question);
 
     /**
      * 選択式の質問を表示します。
@@ -53,7 +53,7 @@ public interface Input
      * @return 回答
      */
     @NotNull
-    InputTask showChoiceQuestion(@NotNull String question, String... choices);
+    Question showChoiceQuestion(@NotNull String question, String... choices);
 
     /**
      * 選択式の質問を表示します。
@@ -63,12 +63,12 @@ public interface Input
      * @return 回答
      */
     @NotNull
-    InputTask showChoiceQuestion(@NotNull String question, @NotNull HashMap<String, String> choices);
+    Question showChoiceQuestion(@NotNull String question, @NotNull HashMap<String, String> choices);
 
     /**
      * 質問募集をキャンセルします。
      *
      * @param task 質問のタスク
      */
-    void cancelQuestion(InputTask task);
+    void cancelQuestion(Question task);
 }

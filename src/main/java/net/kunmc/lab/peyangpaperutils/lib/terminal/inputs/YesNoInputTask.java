@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class YesNoInputTask extends AbstractInputTask implements YesNoInput
+public class YesNoInputTask extends AbstractQuestion implements YesNoInput
 {
     protected static final String[] YES = new String[]{"y", "yes", "はい"};
     protected static final String[] NO = new String[]{"n", "no", "いいえ"};

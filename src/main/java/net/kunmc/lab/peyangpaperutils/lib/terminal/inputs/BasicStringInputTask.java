@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 標準的なテキストの入力タスクです。
  */
-public class BasicStringInputTask extends AbstractInputTask
+public class BasicStringInputTask extends AbstractQuestion
 {
     public BasicStringInputTask(@NotNull Audience target, @NotNull String question, @NotNull Input input)
     {

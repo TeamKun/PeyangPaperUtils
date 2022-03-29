@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Input;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.InputTask;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Question;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Getter
 @EqualsAndHashCode
-abstract class AbstractInputTask implements InputTask
+abstract class AbstractQuestion implements Question
 {
     private final UUID uuid;
     private final UUID target;
@@ -38,7 +38,7 @@ abstract class AbstractInputTask implements InputTask
     @Getter(AccessLevel.PRIVATE)
     private boolean valuePresent;
 
-    public AbstractInputTask(@NotNull Audience target, @NotNull String question, @NotNull Input input)
+    public AbstractQuestion(@NotNull Audience target, @NotNull String question, @NotNull Input input)
     {
         this.uuid = UUID.randomUUID();
         this.target = target instanceof Player ? ((Player) target).getUniqueId(): null;

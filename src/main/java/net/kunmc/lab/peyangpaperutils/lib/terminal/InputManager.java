@@ -2,7 +2,7 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.InputTask;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Question;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 public class InputManager implements Listener
 {
-    private final Map<UUID, ArrayList<InputTask>> inputTasks;
+    private final Map<UUID, ArrayList<Question>> inputTasks;
 
     public InputManager(PeyangPaperUtils plugin)
     {
@@ -35,9 +35,9 @@ public class InputManager implements Listener
      * @param uuid      登録するプレイヤーのUUID。Nullの場合はコンソールからの入力を受け付け
      * @param inputTask 入力タスク
      */
-    public void addInputTask(@Nullable UUID uuid, InputTask inputTask)
+    public void addInputTask(@Nullable UUID uuid, Question inputTask)
     {
-        ArrayList<InputTask> inputTasks = this.inputTasks.get(uuid);
+        ArrayList<Question> inputTasks = this.inputTasks.get(uuid);
         if (inputTasks == null)
             inputTasks = new ArrayList<>();
         inputTasks.add(inputTask);
@@ -50,7 +50,7 @@ public class InputManager implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSay(AsyncChatEvent event)
     {
-        ArrayList<InputTask> inputTasks = this.inputTasks.get(event.getPlayer().getUniqueId());
+        ArrayList<Question> inputTasks = this.inputTasks.get(event.getPlayer().getUniqueId());
         String message = ((TextComponent) event.originalMessage().asComponent()).content();
 
         if (inputTasks == null || inputTasks.isEmpty())
@@ -58,7 +58,7 @@ public class InputManager implements Listener
 
         event.setCancelled(true);
 
-        InputTask inputTask = inputTasks.get(0);
+        Question inputTask = inputTasks.get(0);
 
         if (!inputTask.checkValidInput(message))
         {
@@ -75,14 +75,14 @@ public class InputManager implements Listener
     @EventHandler
     public void onConsoleSay(ServerCommandEvent e)
     {
-        ArrayList<InputTask> inputTasks = this.inputTasks.get(null);
+        ArrayList<Question> inputTasks = this.inputTasks.get(null);
 
         if (inputTasks == null || inputTasks.isEmpty())
             return;
 
         e.setCancelled(true);
 
-        InputTask inputTask = inputTasks.get(0);
+        Question inputTask = inputTasks.get(0);
         String message = e.getCommand();
 
         if (!inputTask.checkValidInput(message))
@@ -104,7 +104,7 @@ public class InputManager implements Listener
      */
     public void cancelInputTask(@Nullable UUID uuid)
     {
-        ArrayList<InputTask> inputTasks = this.inputTasks.get(uuid);
+        ArrayList<Question> inputTasks = this.inputTasks.get(uuid);
         if (inputTasks == null)
             return;
         inputTasks.clear();
@@ -113,14 +113,14 @@ public class InputManager implements Listener
     /**
      * 指定したプレイヤの入力タスクを削除します。
      *
-     * @param uuid      削除するプレイヤのUUID
-     * @param inputTask 削除する入力タスク
+     * @param uuid     削除するプレイヤのUUID
+     * @param question 削除する入力タスク
      */
-    public void cancelInputTask(@Nullable UUID uuid, @NotNull InputTask inputTask)
+    public void cancelInputTask(@Nullable UUID uuid, @NotNull Question question)
     {
-        ArrayList<InputTask> inputTasks = this.inputTasks.get(uuid);
+        ArrayList<Question> inputTasks = this.inputTasks.get(uuid);
         if (inputTasks == null)
             return;
-        inputTasks.remove(inputTask);
+        inputTasks.remove(question);
     }
 }
