@@ -12,7 +12,6 @@ import java.util.Map;
  */
 public class BasicStringInputTask extends AbstractInputTask
 {
-
     public BasicStringInputTask(@NotNull Audience target, @NotNull String question, @NotNull Input input)
     {
         super(target, question, input);

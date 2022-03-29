@@ -1,6 +1,7 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal.inputs;
 
 import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Input;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.inputs.YesNoInput;
 import net.kyori.adventure.audience.Audience;
 import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
@@ -8,10 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * y(Yes,はい), N(No,いいえ) から選択する形式の入力タスクです。
- */
-public class YesNoInputTask extends AbstractInputTask
+public class YesNoInputTask extends AbstractInputTask implements YesNoInput
 {
     protected static final String[] YES = new String[]{"y", "yes", "はい"};
     protected static final String[] NO = new String[]{"n", "no", "いいえ"};
@@ -38,22 +36,13 @@ public class YesNoInputTask extends AbstractInputTask
         }};
     }
 
-    /**
-     * スレッドをブロックして真偽値として値を取得します。
-     *
-     * @return 真偽値
-     * @throws InterruptedException キャンセルされた場合
-     */
+    @Override
     public boolean waitAndGetValueAsBoolean() throws InterruptedException
     {
         return ArrayUtils.contains(YES, waitAndGetValue().toLowerCase());
     }
 
-    /**
-     * 真偽値として値を取得します。
-     *
-     * @return 真偽値
-     */
+    @Override
     public boolean getValueAsBoolean()
     {
         return ArrayUtils.contains(YES, getValue().toLowerCase());
