@@ -5,3 +5,13 @@ api-version: 1.16
 authors: [Peyang]
 description: A utils for Paper server that made by Peyang.
 website: https://kunmc.net/
+
+permissions:
+  peyangutils:
+    default: op
+    description: A main permission for PeyangPaperUtils.
+    children:
+      peyangutils.debug: true
+  peyangutils.debug:
+    default: op
+    description: A debug permission for PeyangPaperUtils.
