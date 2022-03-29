@@ -6,9 +6,6 @@ import net.kunmc.lab.peyangpaperutils.lib.terminal.inputs.BasicStringInputTask;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.inputs.ChoiceInputTask;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.inputs.YesNoCancelInputTask;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.inputs.YesNoInputTask;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Input;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Question;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

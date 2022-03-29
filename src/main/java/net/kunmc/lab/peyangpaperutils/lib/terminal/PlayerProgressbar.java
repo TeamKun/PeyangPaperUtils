@@ -1,6 +1,5 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Progressbar;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * プレイヤのプログレスバーを管理します。
  */
-public class PlayerProgressbar implements Progressbar
+class PlayerProgressbar implements Progressbar
 {
     private final Player player;
     private final BossBar bossBar;

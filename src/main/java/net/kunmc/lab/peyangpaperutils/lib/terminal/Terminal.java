@@ -1,4 +1,4 @@
-package net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces;
+package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;

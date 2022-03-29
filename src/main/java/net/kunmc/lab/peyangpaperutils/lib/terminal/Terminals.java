@@ -1,6 +1,5 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

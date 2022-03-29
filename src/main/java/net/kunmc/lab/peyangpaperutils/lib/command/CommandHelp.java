@@ -1,6 +1,6 @@
 package net.kunmc.lab.peyangpaperutils.lib.command;
 
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;

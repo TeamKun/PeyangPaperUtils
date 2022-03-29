@@ -1,6 +1,6 @@
 package net.kunmc.lab.peyangpaperutils.lib.command;
 
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
 import net.kunmc.lab.peyangpaperutils.lib.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

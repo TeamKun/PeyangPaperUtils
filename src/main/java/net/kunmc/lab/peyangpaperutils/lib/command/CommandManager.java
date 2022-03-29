@@ -1,7 +1,7 @@
 package net.kunmc.lab.peyangpaperutils.lib.command;
 
+import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminals;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
 import net.kunmc.lab.peyangpaperutils.lib.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;

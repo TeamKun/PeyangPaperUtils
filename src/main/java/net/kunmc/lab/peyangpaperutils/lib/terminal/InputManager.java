@@ -2,7 +2,6 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Question;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

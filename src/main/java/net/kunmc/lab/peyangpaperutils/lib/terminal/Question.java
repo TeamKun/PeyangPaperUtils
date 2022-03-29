@@ -4,11 +4,6 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Value;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Input;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Question;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.QuestionAttribute;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.QuestionResult;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -25,11 +20,11 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 入力のタスクです。
+ * 質問のタスクです。
  */
 @Getter
 @EqualsAndHashCode
-public class QuestionImplement implements Question
+public class Question
 {
     private final UUID uuid;
     private final UUID target;
@@ -46,7 +41,7 @@ public class QuestionImplement implements Question
     @Getter(AccessLevel.PRIVATE)
     private QuestionResult result;
 
-    public QuestionImplement(@NotNull Audience target, @NotNull String question, @NotNull Input input, QuestionAttribute... attributes)
+    public Question(@NotNull Audience target, @NotNull String question, @NotNull Input input, QuestionAttribute... attributes)
     {
         this.uuid = UUID.randomUUID();
         this.target = target instanceof Player ? ((Player) target).getUniqueId(): null;
@@ -74,33 +69,34 @@ public class QuestionImplement implements Question
                 .toArray(QuestionAttribute[]::new);
     }
 
-    @Override
+    /**
+     * ブロッキングして結果を取得します。
+     *
+     * @return 入力値
+     * @throws InterruptedException 入力値が取得できなかった場合/スレッドが殺された場合
+     */
     public @NotNull QuestionResult waitAndGetResult() throws InterruptedException
     {
         this.waitForAnswer();
         return this.result;
     }
 
-    @Override
+    /**
+     * ブロッキングせずに回答を取得します。
+     *
+     * @return 回答
+     */
     public @Nullable QuestionResult getAnswer()
     {
         return this.result;
     }
 
-
-    @Override
-    public void waitForAnswer() throws InterruptedException
-    {
-        if (valuePresent)
-            return;
-
-        synchronized (locker)
-        {
-            locker.wait();
-        }
-    }
-
-    @Override
+    /**
+     * 入力値を設定します。
+     * ブロッキングされたスレッドは解放されます。
+     *
+     * @param value 入力値
+     */
     public void setAnswer(@NotNull String value)
     {
         if (valuePresent)
@@ -115,13 +111,35 @@ public class QuestionImplement implements Question
         }
     }
 
-    @Override
+    /**
+     * 回答を得られるまでブロッキングします。
+     *
+     * @throws InterruptedException スレッドが殺された場合
+     */
+    public void waitForAnswer() throws InterruptedException
+    {
+        if (valuePresent)
+            return;
+
+        synchronized (locker)
+        {
+            locker.wait();
+        }
+    }
+
+    /**
+     * 回答が取得できるかどうかを返します。
+     *
+     * @return 回答が取得できるかどうか
+     */
     public boolean isResultAvailable()
     {
         return valuePresent;
     }
 
-    @Override
+    /**
+     * 質問をキャンセルしまします。
+     */
     public void cancel()
     {
         if (valuePresent)
@@ -132,7 +150,12 @@ public class QuestionImplement implements Question
         }
     }
 
-    @Override
+    /**
+     * 質問で有効な入力値かどうかを返します。
+     *
+     * @param input 入力値
+     * @return 質問で有効な入力値かどうか
+     */
     public boolean checkValidInput(String input)
     {
         return Arrays.stream(attributes)
@@ -156,7 +179,11 @@ public class QuestionImplement implements Question
         ));
     }
 
-    @Override
+    /**
+     * 質問を出力します。
+     * 実装時は {@link Terminal#info(String, Object...)} を使用することが望ましいです。
+     * また、{@link Question#getChoices()} が内部で呼び出されます。
+     */
     public void printQuestion()
     {
         Terminal terminal = input.getTerminal();

@@ -1,13 +1,12 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import lombok.Getter;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractBukkitTerminal implements Terminal
+abstract class AbstractBukkitTerminal implements Terminal
 {
     @Getter
     private final Audience audience;

@@ -1,13 +1,12 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Progressbar;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ConsoleTerminal extends AbstractBukkitTerminal
+class ConsoleTerminal extends AbstractBukkitTerminal
 {
     private static final DummyProgressbar DUMMY_PROGRESSBAR;
 

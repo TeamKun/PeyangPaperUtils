@@ -1,6 +1,5 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Progressbar;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,7 @@ import java.util.HashMap;
  * プレイヤのターミナルです。
  * コンストラクタからインスタンスを生成せずに、 {@link Terminals#of(Player)} で取得してください。
  */
-public class PlayerTerminal extends AbstractBukkitTerminal
+class PlayerTerminal extends AbstractBukkitTerminal
 {
     private final Player player;
     private final HashMap<String, Progressbar> progressbars;

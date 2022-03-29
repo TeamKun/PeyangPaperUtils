@@ -1,7 +1,6 @@
 package net.kunmc.lab.peyangpaperutils.lib.command;
 
-import net.kunmc.lab.peyangpaperutils.lib.terminal.PlayerTerminal;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.interfaces.Terminal;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -188,7 +187,7 @@ public abstract class CommandBase
      */
     protected static boolean indicatePlayer(@NotNull Terminal terminal)
     {
-        if (!(terminal instanceof PlayerTerminal))
+        if (terminal.isPlayer())
         {
             terminal.error("このコマンドはプレイヤーからのみ実行できます！");
             return true;
