@@ -1,21 +1,40 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
+import lombok.Getter;
+import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeChoice;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 /**
- * データの入力を行うインターフェースです。
+ * プレイヤの入力です。
  */
-public interface Input
+public class Input
 {
-    /**
-     * ターミナルのインスタンスを取得します。
-     *
-     * @return ターミナルのインスタンス
-     */
-    @NotNull
-    Terminal getTerminal();
+    @Getter
+    private final Terminal terminal;
+
+    Input(Terminal terminal)
+    {
+        this.terminal = terminal;
+    }
+
+    private UUID getUUID()
+    {
+        if (terminal.getAudience() instanceof Player)
+            return ((Player) terminal.getAudience()).getUniqueId();
+
+        return null;
+    }
+
+    private Question registerInputTask(@NotNull Question task)
+    {
+        PeyangPaperUtils.getInstance().getInputManager().addInputTask(getUUID(), task);
+        return task;
+    }
 
     /**
      * Y/N(yes/no)で回答できる質問を表示します。
@@ -23,8 +42,12 @@ public interface Input
      * @param question 質問内容
      * @return 回答
      */
-    @NotNull
-    Question showYNQuestion(@NotNull String question);
+    public @NotNull Question showYNQuestion(@NotNull String question)
+    {
+        return registerInputTask(new Question(terminal.getAudience(), question, this,
+                QuestionAttribute.YES, QuestionAttribute.NO
+        ));
+    }
 
     /**
      * キャンセル可能な、Y/N(yes/no)で回答できる質問を表示します。
@@ -33,8 +56,12 @@ public interface Input
      * @param question 質問内容
      * @return 回答
      */
-    @NotNull
-    Question showYNQuestionCancellable(@NotNull String question);
+    public @NotNull Question showYNQuestionCancellable(@NotNull String question)
+    {
+        return registerInputTask(new Question(terminal.getAudience(), question, this,
+                QuestionAttribute.YES, QuestionAttribute.NO, QuestionAttribute.CANCELLABLE
+        ));
+    }
 
     /**
      * 自由入力で回答できる質問を表示します。
@@ -42,8 +69,10 @@ public interface Input
      * @param question 質問内容
      * @return 回答
      */
-    @NotNull
-    Question showInputQuestion(@NotNull String question);
+    public @NotNull Question showInputQuestion(@NotNull String question)
+    {
+        return registerInputTask(new Question(terminal.getAudience(), question, this));
+    }
 
     /**
      * 選択式の質問を表示します。
@@ -52,8 +81,10 @@ public interface Input
      * @param choices  選択肢
      * @return 回答
      */
-    @NotNull
-    Question showChoiceQuestion(@NotNull String question, String... choices);
+    public @NotNull Question showChoiceQuestion(@NotNull String question, String... choices)
+    {
+        return registerInputTask(new Question(terminal.getAudience(), question, this, new AttributeChoice(choices)));
+    }
 
     /**
      * 選択式の質問を表示します。
@@ -62,13 +93,19 @@ public interface Input
      * @param choices  選択肢
      * @return 回答
      */
-    @NotNull
-    Question showChoiceQuestion(@NotNull String question, @NotNull HashMap<String, String> choices);
+    public @NotNull Question showChoiceQuestion(@NotNull String question, @NotNull HashMap<String, String> choices)
+    {
+        return registerInputTask(new Question(terminal.getAudience(), question, this, new AttributeChoice(choices)));
+    }
 
     /**
      * 質問募集をキャンセルします。
      *
      * @param task 質問のタスク
      */
-    void cancelQuestion(Question task);
+    public void cancelQuestion(Question task)
+    {
+        PeyangPaperUtils.getInstance().getInputManager().cancelInputTask(getUUID(), task);
+    }
 }
+

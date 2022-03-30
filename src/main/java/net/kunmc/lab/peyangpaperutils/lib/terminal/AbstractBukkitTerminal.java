@@ -11,12 +11,12 @@ abstract class AbstractBukkitTerminal implements Terminal
     @Getter
     private final Audience audience;
     @Getter
-    private final InputImplement input;
+    private final Input input;
 
     public AbstractBukkitTerminal(Audience audience)
     {
         this.audience = audience;
-        this.input = new InputImplement(this);
+        this.input = new Input(this);
     }
 
     @Override
