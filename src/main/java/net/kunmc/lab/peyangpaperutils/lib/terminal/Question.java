@@ -202,7 +202,7 @@ public class Question
         Terminal terminal = input.getTerminal();
 
         printSeparator(terminal);
-        terminal.writeLine(ChatColor.GREEN + "    " + question);
+        terminal.writeLine(ChatColor.GREEN + "        " + question);
 
         if (this.attributes.isEmpty())
         {
@@ -210,6 +210,9 @@ public class Question
             printSeparator(terminal);
             return;
         }
+        else
+            terminal.writeLine("    " + ChatColor.GREEN + "回答を入力" +
+                    (terminal.isPlayer() ? "するか、回答をクリック": "") + "してください。");
 
         Map<String, String> choices = getChoices();
         if (choices != null)
