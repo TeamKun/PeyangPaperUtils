@@ -11,7 +11,7 @@ public class AttributeCancellable implements QuestionAttribute
     @Override
     public @NotNull LinkedHashMap<String, String> getChoices(@NotNull LinkedHashMap<String, String> choices)
     {
-        choices.put("c", ChatColor.GRAY + ChatColor.BOLD.toString() + "Cancel");
+        choices.put("c", ChatColor.GRAY + ChatColor.BOLD.toString() + "キャンセル");
         return choices;
     }
 

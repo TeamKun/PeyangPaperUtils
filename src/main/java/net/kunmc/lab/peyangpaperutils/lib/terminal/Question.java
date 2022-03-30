@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 質問のタスクです。
@@ -184,10 +183,9 @@ public class Question
 
     private void printChoices(Terminal terminal, Map<String, String> choices)
     {
-        AtomicInteger index = new AtomicInteger(1);
         choices.forEach((value, text) -> terminal.write(
-                Component.text(ChatColor.YELLOW.toString() + index.getAndIncrement() +
-                                " " + ChatColor.GREEN + text + "( " + value + " )")
+                Component.text(ChatColor.YELLOW + value +
+                                " - " + ChatColor.GREEN + text)
                         .clickEvent(ClickEvent.suggestCommand(value))
                         .hoverEvent(HoverEvent.showText(
                                 Component.text(ChatColor.YELLOW + "クリックして補完！")))
