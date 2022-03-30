@@ -1,6 +1,7 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal.attributes;
 
 import net.kunmc.lab.peyangpaperutils.lib.terminal.QuestionAttribute;
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -10,7 +11,7 @@ public class AttributeNo implements QuestionAttribute
     @Override
     public @NotNull Map<String, String> getChoices(@NotNull Map<String, String> choices)
     {
-        choices.put("n", "いいえ");
+        choices.put("n", ChatColor.RED + ChatColor.BOLD.toString() + "いいえ");
         return choices;
     }
 
