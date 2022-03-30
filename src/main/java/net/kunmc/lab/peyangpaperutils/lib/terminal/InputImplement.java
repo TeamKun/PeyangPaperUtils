@@ -2,10 +2,7 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import lombok.Getter;
 import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.inputs.BasicStringInputTask;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.inputs.ChoiceInputTask;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.inputs.YesNoCancelInputTask;
-import net.kunmc.lab.peyangpaperutils.lib.terminal.inputs.YesNoInputTask;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeChoice;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,31 +39,35 @@ class InputImplement implements Input
     @Override
     public @NotNull Question showYNQuestion(@NotNull String question)
     {
-        return registerInputTask(new YesNoInputTask(terminal.getAudience(), question, this));
+        return registerInputTask(new Question(terminal.getAudience(), question, this,
+                QuestionAttribute.YES, QuestionAttribute.NO
+        ));
     }
 
     @Override
     public @NotNull Question showYNQuestionCancellable(@NotNull String question)
     {
-        return registerInputTask(new YesNoCancelInputTask(terminal.getAudience(), question, this));
+        return registerInputTask(new Question(terminal.getAudience(), question, this,
+                QuestionAttribute.YES, QuestionAttribute.NO, QuestionAttribute.CANCELLABLE
+        ));
     }
 
     @Override
     public @NotNull Question showInputQuestion(@NotNull String question)
     {
-        return registerInputTask(new BasicStringInputTask(terminal.getAudience(), question, this));
+        return registerInputTask(new Question(terminal.getAudience(), question, this));
     }
 
     @Override
     public @NotNull Question showChoiceQuestion(@NotNull String question, String... choices)
     {
-        return registerInputTask(new ChoiceInputTask(terminal.getAudience(), question, this, choices));
+        return registerInputTask(new Question(terminal.getAudience(), question, this, new AttributeChoice(choices)));
     }
 
     @Override
     public @NotNull Question showChoiceQuestion(@NotNull String question, @NotNull HashMap<String, String> choices)
     {
-        return registerInputTask(new ChoiceInputTask(terminal.getAudience(), question, this, choices));
+        return registerInputTask(new Question(terminal.getAudience(), question, this, new AttributeChoice(choices)));
     }
 
     @Override

@@ -1,5 +1,10 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
+import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeApplyForAll;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeCancellable;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeNo;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeOK;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeYes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -7,8 +12,62 @@ import java.util.Map;
 /**
  * 質問の属性を表します。
  */
-public interface QuestionAttribute
+public interface QuestionAttribute extends Comparable<QuestionAttribute>
 {
+    /**
+     * 最も低い優先度を表します。
+     *
+     * @see #getPriority()
+     */
+    int PRIORITY_LOWEST = -5000;
+    /**
+     * 低い優先度を表します。
+     *
+     * @see #getPriority()
+     */
+    int PRIORITY_LOW = -1000;
+    /**
+     * 普通の優先度を表します。
+     *
+     * @see #getPriority()
+     */
+    int PRIORITY_NORMAL = 0;
+    /**
+     * 高い優先度を表します。
+     *
+     * @see #getPriority()
+     */
+    int PRIORITY_HIGH = 1000;
+    /**
+     * 最も高い優先度を表します。
+     *
+     * @see #getPriority()
+     */
+    int PRIORITY_HIGHEST = 5000;
+
+    /**
+     * はい/yで回答できる質問です。
+     */
+    QuestionAttribute YES = new AttributeYes();
+    /**
+     * いいえ/nで回答できる質問です。
+     */
+    QuestionAttribute NO = new AttributeNo();
+    /**
+     * OK/okで回答できる質問です。
+     */
+    QuestionAttribute OK = new AttributeOK();
+    /**
+     * キャンセル可能な質問です。
+     */
+    QuestionAttribute CANCELLABLE = new AttributeCancellable();
+    /**
+     * すべてにおいて、この選択を適用するという意を表します。
+     * ほかの属性と適用することを前提としています。
+     * 例えば、 {@link QuestionAttribute#YES} と併用した場合、新たに "すべて はい" の質問が追加されます。
+     */
+    QuestionAttribute APPLY_FOR_ALL = new AttributeApplyForAll();
+
     /**
      * 質問で有効な回答の一覧を取得します。
      * 値に {@code null} を含む場合、自由入力となります。
@@ -26,19 +85,30 @@ public interface QuestionAttribute
     boolean isMatch(@NotNull String input);
 
     /**
-     * おなじ属性かどうかを判定します。
+     * 属性の名前返します。
      *
-     * @param other 判定対象
-     * @return 同一属性の場合 {@code true}
+     * @return 属性名
      */
-    boolean equals(QuestionAttribute other);
+    String getName();
 
     /**
      * 回答が正しいかどうかをテストします。
-     * 選択式などで、根幹に関わるような不正な入力が合った場合のみ {@code false} を返します。
      *
      * @param input 回答
      * @return 回答が正しい場合 {@code true}
      */
     boolean isValidInput(String input);
+
+    /**
+     * この属性の優先度を返します。
+     *
+     * @return 優先度
+     */
+    int getPriority();
+
+    @Override
+    default int compareTo(@NotNull QuestionAttribute o)
+    {
+        return Integer.compare(getPriority(), o.getPriority());
+    }
 }

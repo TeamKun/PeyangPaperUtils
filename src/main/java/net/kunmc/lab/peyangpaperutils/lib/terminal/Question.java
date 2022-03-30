@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -30,7 +32,7 @@ public class Question
     private final UUID target;
     private final Input input;
     private final String question;
-    private final QuestionAttribute[] attributes;
+    private final NavigableSet<QuestionAttribute> attributes;
     private final Map<String, String> choices;
     private String value;
 
@@ -47,7 +49,7 @@ public class Question
         this.target = target instanceof Player ? ((Player) target).getUniqueId(): null;
         this.input = input;
         this.question = question;
-        this.attributes = attributes;
+        this.attributes = new TreeSet<>(Arrays.asList(attributes)).descendingSet();
 
         this.choices = buildChoices(attributes);
 
@@ -64,7 +66,7 @@ public class Question
 
     private QuestionAttribute[] detectValidAttributes(String input)
     {
-        return Arrays.stream(this.attributes)
+        return this.attributes.stream()
                 .filter(attribute -> attribute.isMatch(input))
                 .toArray(QuestionAttribute[]::new);
     }
@@ -158,8 +160,19 @@ public class Question
      */
     public boolean checkValidInput(String input)
     {
-        return Arrays.stream(attributes)
-                .allMatch(attribute -> attribute.isValidInput(input));
+        if (this.valuePresent || this.attributes.isEmpty())
+            return true;
+
+        boolean result = this.attributes.stream()
+                .anyMatch(attribute -> attribute.isValidInput(input));
+
+        if (!result)
+        {
+            this.choices.clear();
+            this.choices.putAll(buildChoices(this.attributes.toArray(new QuestionAttribute[0])));
+        }
+
+        return result;
     }
 
     private void printSeparator(Terminal terminal)
@@ -191,12 +204,12 @@ public class Question
         printSeparator(terminal);
         terminal.writeLine(ChatColor.GREEN + "    " + question);
 
-        /*if (this instanceof BasicStringInputTask)
+        if (this.attributes.isEmpty())
         {
             terminal.writeLine("    " + ChatColor.GREEN + "回答をチャットまたはコンソールに入力してください。");
             printSeparator(terminal);
             return;
-        }*/
+        }
 
         Map<String, String> choices = getChoices();
         if (choices != null)
@@ -215,8 +228,7 @@ public class Question
         public boolean test(QuestionAttribute attribute)
         {
             return Arrays.stream(validAttributes)
-                    .anyMatch(validAttribute -> validAttribute.equals(attribute));
+                    .anyMatch(validAttribute -> validAttribute.getName().equals(attribute.getName()));
         }
     }
-
 }
