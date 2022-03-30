@@ -3,6 +3,8 @@ package net.kunmc.lab.peyangpaperutils.plugin.commands.debug;
 import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
 import net.kunmc.lab.peyangpaperutils.lib.command.CommandBase;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Question;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.QuestionAttribute;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.QuestionResult;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -35,10 +37,10 @@ public class QuestionDebugCommand extends CommandBase
         switch (type)
         {
             case "yn":
-                in = terminal.getInput().showYNQuestion(question);
+                in = terminal.getInput().showYNQuestion(question, QuestionAttribute.APPLY_FOR_ALL, QuestionAttribute.CANCELLABLE);
                 break;
             case "ync":
-                in = terminal.getInput().showYNQuestionCancellable(question);
+                in = terminal.getInput().showYNQuestionCancellable(question, QuestionAttribute.APPLY_FOR_ALL, QuestionAttribute.CANCELLABLE);
                 break;
             case "input":
                 in = terminal.getInput().showInputQuestion(question);
@@ -55,8 +57,19 @@ public class QuestionDebugCommand extends CommandBase
             {
                 try
                 {
-                    String value = in.waitAndGetValue();
-                    terminal.success("取得した値：%s", value);
+                    QuestionResult result = in.waitAndGetResult();
+                    terminal.success("取得した値：%s", result.getRawAnswer());
+
+                    if (result.test(QuestionAttribute.OK))
+                        terminal.success("OK");
+                    else if (result.test(QuestionAttribute.CANCELLABLE))
+                        terminal.success("キャンセル");
+                    else if (result.test(QuestionAttribute.NO))
+                        terminal.success("NO");
+                    else if (result.test(QuestionAttribute.YES))
+                        terminal.success("YES");
+                    else if (result.test(QuestionAttribute.APPLY_FOR_ALL))
+                        terminal.success("全てに適用");
                 }
                 catch (Exception e)
                 {
