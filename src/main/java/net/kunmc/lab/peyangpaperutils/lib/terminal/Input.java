@@ -42,10 +42,15 @@ public class Input
      * @param question 質問内容
      * @return 回答
      */
-    public @NotNull Question showYNQuestion(@NotNull String question)
+    public @NotNull Question showYNQuestion(@NotNull String question, @NotNull QuestionAttribute... attributes)
     {
+        QuestionAttribute[] attrs = new QuestionAttribute[attributes.length + 2];
+        System.arraycopy(attributes, 0, attrs, 0, attributes.length);
+        attrs[attrs.length - 2] = QuestionAttribute.YES;
+        attrs[attrs.length - 1] = QuestionAttribute.NO;
+
         return registerInputTask(new Question(terminal.getAudience(), question, this,
-                QuestionAttribute.YES, QuestionAttribute.NO
+                attrs
         ));
     }
 
@@ -56,11 +61,15 @@ public class Input
      * @param question 質問内容
      * @return 回答
      */
-    public @NotNull Question showYNQuestionCancellable(@NotNull String question)
+    public @NotNull Question showYNQuestionCancellable(@NotNull String question, @NotNull QuestionAttribute... attributes)
     {
-        return registerInputTask(new Question(terminal.getAudience(), question, this,
-                QuestionAttribute.YES, QuestionAttribute.NO, QuestionAttribute.CANCELLABLE
-        ));
+        QuestionAttribute[] attrs = new QuestionAttribute[attributes.length + 3];
+        System.arraycopy(attributes, 0, attrs, 0, attributes.length);
+        attrs[attrs.length - 3] = QuestionAttribute.CANCELLABLE;
+        attrs[attrs.length - 2] = QuestionAttribute.YES;
+        attrs[attrs.length - 1] = QuestionAttribute.NO;
+
+        return registerInputTask(new Question(terminal.getAudience(), question, this, attrs));
     }
 
     /**
@@ -96,6 +105,18 @@ public class Input
     public @NotNull Question showChoiceQuestion(@NotNull String question, @NotNull HashMap<String, String> choices)
     {
         return registerInputTask(new Question(terminal.getAudience(), question, this, new AttributeChoice(choices)));
+    }
+
+    /**
+     * 質問を表示します。
+     *
+     * @param question   質問
+     * @param attributes 属性
+     * @return 質問
+     */
+    public @NotNull Question showQuestion(@NotNull String question, @NotNull QuestionAttribute... attributes)
+    {
+        return registerInputTask(new Question(terminal.getAudience(), question, this, attributes));
     }
 
     /**
