@@ -62,13 +62,13 @@ public class QuestionDebugCommand extends CommandBase
 
                     if (result.test(QuestionAttribute.OK))
                         terminal.success("OK");
-                    else if (result.test(QuestionAttribute.CANCELLABLE))
+                    if (result.test(QuestionAttribute.CANCELLABLE))
                         terminal.success("キャンセル");
-                    else if (result.test(QuestionAttribute.NO))
+                    if (result.test(QuestionAttribute.NO))
                         terminal.success("NO");
-                    else if (result.test(QuestionAttribute.YES))
+                    if (result.test(QuestionAttribute.YES))
                         terminal.success("YES");
-                    else if (result.test(QuestionAttribute.APPLY_FOR_ALL))
+                    if (result.test(QuestionAttribute.APPLY_FOR_ALL))
                         terminal.success("全てに適用");
                 }
                 catch (Exception e)
