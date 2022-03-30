@@ -74,6 +74,12 @@ class CommandHelp extends CommandBase
             return;
         }
 
+        if (page < 1 || page > pageLengthMax)
+        {
+            terminal.error("ページ番号が範囲外です。");
+            return;
+        }
+
         buildHelpPage(terminal, pluginName, page, pageLengthMax, commands, subCommand ? args[0]: null);
     }
 
