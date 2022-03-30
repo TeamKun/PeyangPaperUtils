@@ -14,10 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.NavigableSet;
-import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,8 +32,8 @@ public class Question
     private final UUID target;
     private final Input input;
     private final String question;
-    private final NavigableSet<QuestionAttribute> attributes;
-    private final Map<String, String> choices;
+    private final List<QuestionAttribute> attributes;
+    private final LinkedHashMap<String, String> choices;
     private String value;
 
     @Getter(AccessLevel.PRIVATE)
@@ -49,16 +49,18 @@ public class Question
         this.target = target instanceof Player ? ((Player) target).getUniqueId(): null;
         this.input = input;
         this.question = question;
-        this.attributes = new TreeSet<>(Arrays.asList(attributes)).descendingSet();
+        this.attributes = Arrays.asList(attributes);
+        this.attributes.sort(Comparator.comparingInt(QuestionAttribute::getPriority).reversed());
+
 
         this.choices = buildChoices(attributes);
 
         this.locker = new Object();
     }
 
-    private static Map<String, String> buildChoices(QuestionAttribute[] attributes)
+    private static LinkedHashMap<String, String> buildChoices(QuestionAttribute[] attributes)
     {
-        HashMap<String, String> choices = new HashMap<>();
+        LinkedHashMap<String, String> choices = new LinkedHashMap<>();
         for (QuestionAttribute attribute : attributes)
             choices.putAll(attribute.getChoices(choices));
         return choices;

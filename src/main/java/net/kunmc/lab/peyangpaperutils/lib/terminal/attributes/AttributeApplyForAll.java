@@ -1,20 +1,27 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal.attributes;
 
 import net.kunmc.lab.peyangpaperutils.lib.terminal.QuestionAttribute;
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.AbstractMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AttributeApplyForAll implements QuestionAttribute
 {
     @Override
-    public @NotNull Map<String, String> getChoices(@NotNull Map<String, String> choices)
+    public @NotNull LinkedHashMap<String, String> getChoices(@NotNull LinkedHashMap<String, String> choices)
     {
-        return choices.entrySet().stream()
-                .map(entry -> new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue() + "_a"))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, String> result = new LinkedHashMap<>();
+
+        for (Map.Entry<String, String> entry : choices.entrySet())
+            result.put(
+                    entry.getKey() + "_a",
+                    ChatColor.GOLD + ChatColor.BOLD.toString() + "すべて " + entry.getValue()
+            );
+
+        choices.putAll(result);
+        return choices;
     }
 
     @Override

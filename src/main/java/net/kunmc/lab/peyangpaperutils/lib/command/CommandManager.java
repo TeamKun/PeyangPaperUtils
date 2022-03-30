@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,9 +25,25 @@ import java.util.Map;
  */
 public class CommandManager implements CommandExecutor, TabCompleter
 {
+    private static final Field subcommandNameField;
     private final HashMap<String, CommandBase> commands;
     private final String permission;
     private final CommandBase helpCommand;
+
+    static
+    {
+        try
+        {
+            subcommandNameField = SubCommandWith.class.getDeclaredField("commandName");
+            subcommandNameField.setAccessible(true);
+        }
+        catch (NoSuchFieldException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private final String commandName;
 
     /**
      * コマンドマネジャのコンストラクタです。
@@ -41,6 +56,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
     @SuppressWarnings("ConstantConditions")
     public CommandManager(@NotNull JavaPlugin plugin, @NotNull String commandName, @NotNull String pluginName, @NotNull String permission)
     {
+        this.commandName = commandName;
         commands = new HashMap<>();
         this.permission = permission;
         this.helpCommand = new CommandHelp(pluginName, commandName, permission + ".help", commands);
@@ -55,16 +71,9 @@ public class CommandManager implements CommandExecutor, TabCompleter
     {
         try
         {
-            Field field = command.getClass().getDeclaredField("commandName");
-            field.setAccessible(true);
-
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-            field.set(command, name);
+            subcommandNameField.set(command, name);
         }
-        catch (NoSuchFieldException | IllegalAccessException ignored)
+        catch (IllegalAccessException ignored)
         {
         }
     }
@@ -103,7 +112,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
         commands.put(commandName, command);
 
         if (command instanceof SubCommandWith)
-            injectSubcommand(commandName, (SubCommandWith) command);
+            injectSubcommand(this.commandName, (SubCommandWith) command);
     }
 
     @Override
@@ -117,14 +126,14 @@ public class CommandManager implements CommandExecutor, TabCompleter
 
         if (CommandBase.indicateArgsLengthInvalid(terminal, args, 1))
         {
-            helpCommand.onCommand(sender, terminal, Utils.removeFirstElement(new String[0]));
+            helpCommand.onCommand(sender, terminal, new String[0]);
             return true;
         }
 
         if (!commands.containsKey(args[0]))
         {
             terminal.error("サブコマンドが見つかりませんでした:  " + args[0]);
-            helpCommand.onCommand(sender, terminal, Utils.removeFirstElement(new String[0]));
+            helpCommand.onCommand(sender, terminal, new String[0]);
             return true;
         }
 

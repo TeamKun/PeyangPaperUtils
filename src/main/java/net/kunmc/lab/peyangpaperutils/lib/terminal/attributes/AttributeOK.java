@@ -4,12 +4,12 @@ import net.kunmc.lab.peyangpaperutils.lib.terminal.QuestionAttribute;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class AttributeOK implements QuestionAttribute
 {
     @Override
-    public @NotNull Map<String, String> getChoices(@NotNull Map<String, String> choices)
+    public @NotNull LinkedHashMap<String, String> getChoices(@NotNull LinkedHashMap<String, String> choices)
     {
         choices.put("ok", ChatColor.GREEN + ChatColor.BOLD.toString() + "OK");
         return choices;

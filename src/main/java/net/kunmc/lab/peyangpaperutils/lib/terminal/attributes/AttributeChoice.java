@@ -3,7 +3,7 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal.attributes;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.QuestionAttribute;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AttributeChoice implements QuestionAttribute
@@ -12,18 +12,18 @@ public class AttributeChoice implements QuestionAttribute
 
     public AttributeChoice(Map<String, String> choices)
     {
-        this.choices = choices;
+        this.choices = new LinkedHashMap<>(choices);
     }
 
     public AttributeChoice(String... choices)
     {
-        this.choices = new HashMap<>(choices.length);
+        this.choices = new LinkedHashMap<>(choices.length);
         for (String choice : choices)
             this.choices.put(choice.toLowerCase(), choice);
     }
 
     @Override
-    public @NotNull Map<String, String> getChoices(@NotNull Map<String, String> choices)
+    public @NotNull LinkedHashMap<String, String> getChoices(@NotNull LinkedHashMap<String, String> choices)
     {
         choices.putAll(this.choices);
         return choices;

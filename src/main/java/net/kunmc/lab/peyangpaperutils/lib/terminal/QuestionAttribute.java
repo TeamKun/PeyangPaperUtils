@@ -7,12 +7,12 @@ import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeOK;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.attributes.AttributeYes;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * 質問の属性を表します。
  */
-public interface QuestionAttribute extends Comparable<QuestionAttribute>
+public interface QuestionAttribute
 {
     /**
      * 最も低い優先度を表します。
@@ -75,7 +75,7 @@ public interface QuestionAttribute extends Comparable<QuestionAttribute>
      * @param choices 既存の有効な回答の一覧
      * @return 回答一覧
      */
-    @NotNull Map<String, String> getChoices(@NotNull Map<String, String> choices);
+    @NotNull LinkedHashMap<String, String> getChoices(@NotNull LinkedHashMap<String, String> choices);
 
     /**
      * 属性に合っているかどうかを判定します。
@@ -106,9 +106,4 @@ public interface QuestionAttribute extends Comparable<QuestionAttribute>
      */
     int getPriority();
 
-    @Override
-    default int compareTo(@NotNull QuestionAttribute o)
-    {
-        return Integer.compare(getPriority(), o.getPriority());
-    }
 }
