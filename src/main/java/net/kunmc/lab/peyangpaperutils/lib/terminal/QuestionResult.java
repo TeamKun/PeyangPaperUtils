@@ -16,7 +16,18 @@ public interface QuestionResult
 
     /**
      * 属性が回答に含まれているかどうかをテストします。
+     * <p>
+     * 使用法：
+     * <pre>
+     *     if (result.test(QuestionAttribute.YES)) {
+     *         if (result.test(QuestionAttribute.APPLY_FOR_ALL)) {
+     *             System.out.println("Yes for all!");
+     *         } else {
+     *             System.out.println("Yes!");
+     *         }
+     *     }
      *
+     * @see QuestionAttribute
      * @param attribute 属性
      * @return 属性が回答に含まれている場合はtrue
      */
