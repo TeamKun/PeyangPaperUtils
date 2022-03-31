@@ -3,6 +3,7 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,6 +18,9 @@ import java.util.UUID;
 
 /**
  * 入力のマネージャです。
+ *
+ * @see Terminals#of(Player)
+ * @see Terminals#ofConsole()
  */
 public class InputManager implements Listener
 {
