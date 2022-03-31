@@ -23,3 +23,17 @@
 + コマンドヘルプシステム
     + コマンドの引数を含んだ、ページ化されたヘルプを自動で構築する。
     + `/<ベースコマンド名> help [サブコマンド名|ページ番号] [ページ番号]` でつかえる。
++ Runner
+    + `BukkitRunnable` の引数に `Plugin` を指定しなくていいように。
+    + つまり実行したプラグインは自動で推測される！
+    + Example
+      ```java
+      Runner.run(() => {
+          Terminal.ofConsole().info("Hello, world!");
+      });
+      
+      // 1秒後(20チック)に実行
+      Runner.runTimer(() => {
+          Terminal.ofConsole().info("Hello, world!");
+      }, 20L);
+      ```
