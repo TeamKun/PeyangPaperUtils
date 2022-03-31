@@ -8,6 +8,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -178,7 +179,8 @@ public class Question
 
     private void printSeparator(Terminal terminal)
     {
-        terminal.writeLine(ChatColor.BLUE + ChatColor.STRIKETHROUGH.toString() + "================================================");
+        terminal.writeLine(ChatColor.BLUE + ChatColor.STRIKETHROUGH.toString() +
+                "================================================================================");
     }
 
     private void printChoices(Terminal terminal, Map<String, String> choices)
@@ -186,9 +188,9 @@ public class Question
         choices.forEach((value, text) -> terminal.write(
                 Component.text(ChatColor.YELLOW + value +
                                 " - " + ChatColor.GREEN + text)
-                        .clickEvent(ClickEvent.suggestCommand(value))
+                        .clickEvent(ClickEvent.runCommand(value))
                         .hoverEvent(HoverEvent.showText(
-                                Component.text(ChatColor.YELLOW + "クリックして補完！")))
+                                Component.text(ChatColor.YELLOW + "クリックして送信： " + text)))
         ));
     }
 
@@ -202,17 +204,19 @@ public class Question
         Terminal terminal = input.getTerminal();
 
         printSeparator(terminal);
-        terminal.writeLine(ChatColor.GREEN + "        " + question);
+        terminal.writeLine(ChatColor.GREEN + StringUtils.repeat(" ", 40 - (question.length() / 2)) + question);
 
         if (this.attributes.isEmpty())
         {
-            terminal.writeLine("    " + ChatColor.GREEN + "回答をチャットまたはコンソールに入力してください。");
+            terminal.writeLine("        ---- " + ChatColor.GREEN +
+                    "回答をチャットまたはコンソールに入力してください。" + ChatColor.WHITE + " ----");
             printSeparator(terminal);
             return;
         }
         else
-            terminal.writeLine("    " + ChatColor.GREEN + "回答を入力" +
-                    (terminal.isPlayer() ? "するか、回答をクリック": "") + "してください。");
+            terminal.writeLine("        ---- " +
+                    ChatColor.GREEN + "回答を入力" +
+                    (terminal.isPlayer() ? "するか、回答をクリック": "") + "してください。" + ChatColor.WHITE + " ----");
 
         Map<String, String> choices = getChoices();
         if (choices != null)
