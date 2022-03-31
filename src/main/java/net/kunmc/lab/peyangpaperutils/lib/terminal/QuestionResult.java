@@ -26,6 +26,7 @@ public interface QuestionResult
      *             System.out.println("Yes!");
      *         }
      *     }
+     * </pre>
      *
      * @see QuestionAttribute
      * @param attribute 属性

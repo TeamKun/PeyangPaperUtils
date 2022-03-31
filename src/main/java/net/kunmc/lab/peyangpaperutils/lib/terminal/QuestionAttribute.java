@@ -80,6 +80,7 @@ public interface QuestionAttribute
     /**
      * 属性に合っているかどうかを判定します。
      *
+     * @param input 回答
      * @return 回答
      */
     boolean isMatch(@NotNull String input);

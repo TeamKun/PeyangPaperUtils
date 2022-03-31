@@ -197,7 +197,6 @@ public class Question
     /**
      * 質問を出力します。
      * 実装時は {@link Terminal#info(String, Object...)} を使用することが望ましいです。
-     * また、{@link Question#getChoices()} が内部で呼び出されます。
      */
     public void printQuestion()
     {

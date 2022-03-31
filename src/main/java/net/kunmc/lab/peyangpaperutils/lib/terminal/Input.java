@@ -39,7 +39,8 @@ public class Input
     /**
      * Y/N(yes/no)で回答できる質問を表示します。
      *
-     * @param question 質問内容
+     * @param question   質問内容
+     * @param attributes 属性
      * @return 回答
      */
     public @NotNull Question showYNQuestion(@NotNull String question, @NotNull QuestionAttribute... attributes)
@@ -59,6 +60,7 @@ public class Input
      * また、キャンセルされた場合は値に{@code null}が収納されます。
      *
      * @param question 質問内容
+     * @param attributes 属性
      * @return 回答
      */
     public @NotNull Question showYNQuestionCancellable(@NotNull String question, @NotNull QuestionAttribute... attributes)
