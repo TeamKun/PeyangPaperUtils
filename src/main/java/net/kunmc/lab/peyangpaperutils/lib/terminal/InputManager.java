@@ -50,7 +50,7 @@ public class InputManager implements Listener
     public void onSay(AsyncChatEvent event)
     {
         ArrayList<Question> inputTasks = this.inputTasks.get(event.getPlayer().getUniqueId());
-        String message = ((TextComponent) event.originalMessage().asComponent()).content();
+        String message = ((TextComponent) event.message().asComponent()).content();
 
         if (inputTasks == null || inputTasks.isEmpty())
             return;
