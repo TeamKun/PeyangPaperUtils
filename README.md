@@ -2,6 +2,8 @@
 
 ぺやんぐがLabで開発してるときに作ったユーティリティとかをまとめたやつ。
 
+## [JavaDoc](https://teamkun.github.io/PeyangPaperUtils/)
+
 ## いまあるもの
 
 + ターミナル
