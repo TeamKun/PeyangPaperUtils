@@ -149,7 +149,7 @@ class CommandHelp extends CommandBase
     }
 
     @Override
-    public @NotNull String getPermission()
+    public @Nullable String getPermission()
     {
         return permission;
     }

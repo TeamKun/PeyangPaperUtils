@@ -90,6 +90,9 @@ public class CommandManager implements CommandExecutor, TabCompleter
         {
             CommandBase commandBase = commands.get(args[0]);
 
+            if (commandBase.getPermission() != null && !sender.hasPermission(commandBase.getPermission()))
+                return completes;
+
             String[] commandArguments = commandBase.getArguments();
             List<String> commandCompletes = commandBase.onTabComplete(sender, terminal, Utils.removeFirstElement(args));
             if (commandCompletes != null)
@@ -138,6 +141,11 @@ public class CommandManager implements CommandExecutor, TabCompleter
         }
 
         CommandBase commandBase = commands.get(args[0]);
+        if (commandBase.getPermission() != null && !sender.hasPermission(commandBase.getPermission()))
+        {
+            terminal.error("このコマンドを使用するには権限が必要です！");
+            return true;
+        }
         commandBase.onCommand(sender, terminal, Utils.removeFirstElement(args));
         return true;
     }

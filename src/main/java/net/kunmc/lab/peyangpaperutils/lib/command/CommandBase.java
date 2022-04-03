@@ -334,10 +334,11 @@ public abstract class CommandBase
 
     /**
      * このコマンドの実行に必要な権限を返します。
+     * 返された権限はハンドラの呼び出し前に自動でチェックされます。
      *
      * @return このコマンドの実行に必要な権限
      */
-    public abstract @NotNull String getPermission();
+    public abstract @Nullable String getPermission();
 
     /**
      * ヘルプ用のコマンドの要約を返します。

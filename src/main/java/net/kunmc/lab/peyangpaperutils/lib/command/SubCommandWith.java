@@ -52,6 +52,8 @@ public abstract class SubCommandWith extends CommandBase
         }
 
         CommandBase commandBase = commands.get(args[0]);
+        if (commandBase.getPermission() != null && checkPermission(sender, terminal, commandBase.getPermission()))
+            return;
         commandBase.onCommand(sender, terminal, Utils.removeFirstElement(args));
     }
 
