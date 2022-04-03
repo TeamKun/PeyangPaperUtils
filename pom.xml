@@ -6,7 +6,7 @@
 
     <groupId>net.kunmc.lab</groupId>
     <artifactId>PeyangPaperUtils</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>PeyangPaperUtils</name>
