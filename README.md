@@ -40,6 +40,14 @@
           }
       }, 20L);
 
+      // 1秒毎(20チック)に実行 + カウント
+      Runner.runTimer((long count) => {
+          Terminal.ofConsole().info(count + ": Hello, world!");
+          if (count == 10) {
+              this.cancel();
+          }
+      }, 20L);
+      
       Runner.run(() => {
           throw new IOException("Hello, exception!");
       }, (Exception exception) => {
