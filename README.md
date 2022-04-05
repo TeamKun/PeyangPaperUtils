@@ -35,6 +35,9 @@
       // 1秒毎(20チック)に実行
       Runner.runTimer(() => {
           Terminal.ofConsole().info("Hello, world!");
+          if (new Random().nextInt(10) == 0) {
+              this.cancel();
+          }
       }, 20L);
 
       Runner.run(() => {
