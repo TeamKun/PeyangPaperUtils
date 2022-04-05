@@ -32,8 +32,14 @@
           Terminal.ofConsole().info("Hello, world!");
       });
       
-      // 1秒後(20チック)に実行
+      // 1秒毎(20チック)に実行
       Runner.runTimer(() => {
           Terminal.ofConsole().info("Hello, world!");
       }, 20L);
+
+      Runner.run(() => {
+          throw new IOException("Hello, exception!");
+      }, (Exception exception) => {
+          Terminal.ofConsole().error(exception.getMessage());
+      });
       ```
