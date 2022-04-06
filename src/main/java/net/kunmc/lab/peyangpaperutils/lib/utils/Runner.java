@@ -414,9 +414,13 @@ public class Runner
     {
         ClassLoader classLoader = clazz.getClassLoader();
         if (!(classLoader instanceof PluginClassLoader))
-            return null;
+            throw new IllegalArgumentException("ClassLoader is not PluginClassLoader");
+
         PluginClassLoader pluginClassLoader = (PluginClassLoader) classLoader;
-        return pluginClassLoader.getPlugin();
+        Plugin plugin = pluginClassLoader.getPlugin();
+        if (plugin == null)
+            throw new IllegalStateException("Can't specify your plugin.");
+        return plugin;
     }
 
     /**
@@ -431,10 +435,6 @@ public class Runner
     public static @NotNull BukkitTask run(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return run(plugin, runnable, onException);
     }
 
@@ -450,10 +450,6 @@ public class Runner
     public static @NotNull BukkitTask runAsync(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runAsync(plugin, runnable, onException);
     }
 
@@ -470,10 +466,6 @@ public class Runner
     public static @NotNull BukkitTask runLater(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runLater(plugin, runnable, onException, delay);
     }
 
@@ -490,10 +482,6 @@ public class Runner
     public static @NotNull BukkitTask runLaterAsync(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runLaterAsync(plugin, runnable, onException, delay);
     }
 
@@ -511,10 +499,6 @@ public class Runner
     public static @NotNull BukkitTask runTimer(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runTimer(plugin, runnable, onException, period, delay);
     }
 
@@ -532,10 +516,6 @@ public class Runner
     public static @NotNull BukkitTask runTimerAsync(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runTimerAsync(plugin, runnable, onException, period, delay);
     }
 
@@ -553,10 +533,6 @@ public class Runner
     public static @NotNull BukkitTask runTimer(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runTimer(plugin, runnable, onException, 0L, period);
     }
 
@@ -573,10 +549,6 @@ public class Runner
     public static @NotNull BukkitTask runTimerAsync(GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runTimerAsync(plugin, runnable, onException, 0L, period);
     }
 
@@ -593,10 +565,6 @@ public class Runner
     public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runTimer(plugin, runnable, onException, period, delay);
     }
 
@@ -614,10 +582,6 @@ public class Runner
     public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runTimerAsync(plugin, runnable, onException, period, delay);
     }
 
@@ -635,10 +599,6 @@ public class Runner
     public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return runTimer(plugin, runnable, onException, 0L, period);
     }
 
@@ -655,12 +615,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimerAsync(plugin, runnable, onException, 0L, period);
+        return runTimerAsync(getPlugin(MethodHandles.lookup().lookupClass()), runnable, onException, 0L, period);
     }
 
     /**
@@ -674,10 +629,6 @@ public class Runner
     public static @NotNull BukkitTask run(@NotNull GeneralExceptableRunner runnable)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
         return run(plugin, runnable);
     }
 
@@ -691,12 +642,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runAsync(@NotNull GeneralExceptableRunner runnable)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runAsync(plugin, runnable);
+        return runAsync(getPlugin(MethodHandles.lookup().lookupClass()), runnable);
     }
 
     /**
@@ -710,12 +656,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runLater(@NotNull GeneralExceptableRunner runnable, long delay)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runLater(plugin, runnable, delay);
+        return runLater(getPlugin(MethodHandles.lookup().lookupClass()), runnable, delay);
     }
 
     /**
@@ -729,12 +670,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runLaterAsync(@NotNull GeneralExceptableRunner runnable, long delay)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runLaterAsync(plugin, runnable, delay);
+        return runLaterAsync(getPlugin(MethodHandles.lookup().lookupClass()), runnable, delay);
     }
 
     /**
@@ -749,12 +685,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimer(@NotNull GeneralExceptableRunner runnable, long delay, long period)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimer(plugin, runnable, delay, period);
+        return runTimer(getPlugin(MethodHandles.lookup().lookupClass()), runnable, delay, period);
     }
 
     /**
@@ -769,12 +700,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull GeneralExceptableRunner runnable, long delay, long period)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimerAsync(plugin, runnable, delay, period);
+        return runTimerAsync(getPlugin(MethodHandles.lookup().lookupClass()), runnable, delay, period);
     }
 
     /**
@@ -789,12 +715,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimer(@NotNull GeneralExceptableRunner runnable, long period)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimer(plugin, runnable, 0L, period);
+        return runTimer(getPlugin(MethodHandles.lookup().lookupClass()), runnable, 0L, period);
     }
 
     /**
@@ -809,12 +730,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull GeneralExceptableRunner runnable, long period)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimerAsync(plugin, runnable, 0L, period);
+        return runTimerAsync(getPlugin(MethodHandles.lookup().lookupClass()), runnable, 0L, period);
     }
 
     /**
@@ -828,12 +744,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, long period, long delay)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimer(plugin, runnable, period, delay);
+        return runTimer(getPlugin(MethodHandles.lookup().lookupClass()), runnable, period, delay);
     }
 
     /**
@@ -847,12 +758,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, long period, long delay)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimerAsync(plugin, runnable, period, delay);
+        return runTimerAsync(getPlugin(MethodHandles.lookup().lookupClass()), runnable, period, delay);
     }
 
     /**
@@ -867,12 +773,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, long period)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimer(plugin, runnable, 0L, period);
+        return runTimer(getPlugin(MethodHandles.lookup().lookupClass()), runnable, 0L, period);
     }
 
     /**
@@ -887,12 +788,7 @@ public class Runner
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, long period)
     {
-        Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
-
-        if (plugin == null)
-            throw new IllegalStateException("Can't specify your plugin.");
-
-        return runTimerAsync(plugin, runnable, 0L, period);
+        return runTimerAsync(getPlugin(MethodHandles.lookup().lookupClass()), runnable, 0L, period);
     }
 
     private interface RunnableRunner
