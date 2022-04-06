@@ -35,22 +35,17 @@
       // 1秒毎(20チック)に実行
       Runner.runTimer(() => {
           Terminal.ofConsole().info("Hello, world!");
-          if (new Random().nextInt(10) == 0) {
-              this.cancel();
-          }
       }, 20L);
 
       // 1秒毎(20チック)に実行 + カウント
       Runner.runTimer((long count) => {
           Terminal.ofConsole().info(count + ": Hello, world!");
-          if (count == 10) {
-              this.cancel();
-          }
       }, 20L);
       
-      Runner.run(() => {
+      Runner.runTimer(() => {
           throw new IOException("Hello, exception!");
-      }, (Exception exception) => {
+      }, (Exception exception, BukkitTask task) => {
           Terminal.ofConsole().error(exception.getMessage());
-      });
+          task.cancel();
+      }, 20L);
       ```
