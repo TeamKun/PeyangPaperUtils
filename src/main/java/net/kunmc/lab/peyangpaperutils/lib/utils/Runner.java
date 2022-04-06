@@ -29,10 +29,9 @@ public class Runner
      */
     public static @NotNull BukkitTask run(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException)
     {
-        GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        PrivateRunnable privateRunnable = new PrivateRunnable(runner, onException);
-        BukkitTask task = privateRunnable.runTask(plugin);
-        runner.setTask(task);
+        RunnableWrapper runnableWrapper = new RunnableWrapper(runnable, onException);
+        BukkitTask task = runnableWrapper.runTask(plugin);
+        runnableWrapper.setTask(task);
         return task;
     }
 
@@ -47,9 +46,9 @@ public class Runner
      */
     public static @NotNull BukkitTask runAsync(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException)
     {
-        GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = new PrivateRunnable(runner, onException).runTaskAsynchronously(plugin);
-        runner.setTask(task);
+        RunnableWrapper runnableWrapper = new RunnableWrapper(runnable, onException);
+        BukkitTask task = runnableWrapper.runTaskAsynchronously(plugin);
+        runnableWrapper.setTask(task);
         return task;
     }
 
@@ -66,9 +65,9 @@ public class Runner
     public static @NotNull BukkitTask runLater(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable,
                                                @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay)
     {
-        GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = new PrivateRunnable(runner, onException).runTaskLater(plugin, delay);
-        runner.setTask(task);
+        RunnableWrapper runnableWrapper = new RunnableWrapper(runnable, onException);
+        BukkitTask task = runnableWrapper.runTaskLater(plugin, delay);
+        runnableWrapper.setTask(task);
         return task;
     }
 
@@ -85,9 +84,9 @@ public class Runner
     public static @NotNull BukkitTask runLaterAsync(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable,
                                                     @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay)
     {
-        GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = new PrivateRunnable(runner, onException).runTaskLaterAsynchronously(plugin, delay);
-        runner.setTask(task);
+        RunnableWrapper runnableWrapper = new RunnableWrapper(runnable, onException);
+        BukkitTask task = runnableWrapper.runTaskLaterAsynchronously(plugin, delay);
+        runnableWrapper.setTask(task);
         return task;
     }
 
@@ -105,9 +104,9 @@ public class Runner
     public static @NotNull BukkitTask runTimer(@NotNull Plugin plugin, @Nullable GeneralExceptableRunner runnable,
                                                @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay, long period)
     {
-        GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = new PrivateRunnable(runner, onException).runTaskTimer(plugin, delay, period);
-        runner.setTask(task);
+        RunnableWrapper runnableWrapper = new RunnableWrapper(runnable, onException);
+        BukkitTask task = runnableWrapper.runTaskTimer(plugin, delay, period);
+        runnableWrapper.setTask(task);
         return task;
     }
 
@@ -125,9 +124,9 @@ public class Runner
     public static @NotNull BukkitTask runTimerAsync(@NotNull Plugin plugin, @Nullable GeneralExceptableRunner runnable,
                                                     @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay, long period)
     {
-        GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = new PrivateRunnable(runner, onException).runTaskTimerAsynchronously(plugin, delay, period);
-        runner.setTask(task);
+        RunnableWrapper runnableWrapper = new RunnableWrapper(runnable, onException);
+        BukkitTask task = runnableWrapper.runTaskTimerAsynchronously(plugin, delay, period);
+        runnableWrapper.setTask(task);
         return task;
     }
 
@@ -179,9 +178,9 @@ public class Runner
     public static @NotNull BukkitTask runTimer(@NotNull Plugin plugin, @Nullable CountExceptableRunner runnable,
                                                @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay, long period)
     {
-        CountExceptableRunnerWrapper runner = new CountExceptableRunnerWrapper(runnable);
-        BukkitTask task = new PrivateRunnable(runner, onException).runTaskTimer(plugin, delay, period);
-        runner.setTask(task);
+        RunnableWrapper runnableWrapper = new RunnableWrapper(runnable, onException);
+        BukkitTask task = runnableWrapper.runTaskTimer(plugin, delay, period);
+        runnableWrapper.setTask(task);
         return task;
     }
 
@@ -199,9 +198,9 @@ public class Runner
     public static @NotNull BukkitTask runTimerAsync(@NotNull Plugin plugin, @Nullable CountExceptableRunner runnable,
                                                     @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay, long period)
     {
-        CountExceptableRunnerWrapper runner = new CountExceptableRunnerWrapper(runnable);
-        BukkitTask task = new PrivateRunnable(runner, onException).runTaskTimerAsynchronously(plugin, delay, period);
-        runner.setTask(task);
+        RunnableWrapper runnableWrapper = new RunnableWrapper(runnable, onException);
+        BukkitTask task = runnableWrapper.runTaskTimerAsynchronously(plugin, delay, period);
+        runnableWrapper.setTask(task);
         return task;
     }
 
@@ -896,24 +895,15 @@ public class Runner
         return runTimerAsync(plugin, runnable, 0L, period);
     }
 
-    /**
-     * キャンセル可能なランナー
-     */
-    interface CancellableRunner
+    private interface RunnableRunner
     {
-        /**
-         * 実行をキャンセルします。
-         */
-        default void cancel()
-        {
-        } // It will be overridden.
     }
 
     /**
      * Exceptionのスローを許容します。 {@link CountExceptableRunner#run(long)} の実行時に {@code 0} からカウントされます。
      */
     @FunctionalInterface
-    public interface CountExceptableRunner extends CancellableRunner
+    public interface CountExceptableRunner extends RunnableRunner
     {
         /**
          * 実行します。
@@ -928,7 +918,7 @@ public class Runner
      * Exceptionのスローを許容します。
      */
     @FunctionalInterface
-    public interface GeneralExceptableRunner extends CancellableRunner
+    public interface GeneralExceptableRunner extends RunnableRunner
     {
         /**
          * 実行します。
@@ -938,81 +928,21 @@ public class Runner
         void run() throws Exception;
     }
 
-    private static class GeneralExceptableRunnerWrapper implements GeneralExceptableRunner
+    private static class RunnableWrapper extends BukkitRunnable
     {
-        protected final GeneralExceptableRunner runner;
-
-        @Setter
-        private BukkitTask task;
-
-        GeneralExceptableRunnerWrapper(GeneralExceptableRunner runner)
-        {
-            this.runner = runner;
-        }
-
-        @Override
-        public void run() throws Exception
-        {
-            this.runner.run();
-        }
-
-        @Override
-        public void cancel()
-        {
-            try
-            {
-                if (this.task != null)
-                    this.task.cancel();
-            }
-            catch (RuntimeException ignored)
-            {
-            }
-        }
-    }
-
-    private static class CountExceptableRunnerWrapper extends GeneralExceptableRunnerWrapper implements CountExceptableRunner
-    {
+        private final RunnableRunner runner;
+        private final BiConsumer<? super Exception, ? super BukkitTask> onException;
         private final AtomicLong count;
 
-        CountExceptableRunnerWrapper(CountExceptableRunner runner)
-        {
-            super((GeneralExceptableRunner) runner);
-            this.count = new AtomicLong();
-        }
-
-        @Override
-        public void run() throws Exception
-        {
-            this.run(this.count.getAndIncrement());
-        }
-
-        @Override
-        public void run(long count) throws Exception
-        {
-            ((CountExceptableRunner) this.runner).run(count);
-        }
-    }
-
-    private static class PrivateRunnable extends BukkitRunnable
-    {
-        private final GeneralExceptableRunnerWrapper runner;
-        private final BiConsumer<? super Exception, ? super BukkitTask> onException;
-
         @Setter
         private BukkitTask task;
 
-        public PrivateRunnable(GeneralExceptableRunnerWrapper runner, BiConsumer<? super Exception, ? super BukkitTask> onException)
+        RunnableWrapper(RunnableRunner runner, BiConsumer<? super Exception, ? super BukkitTask> onException)
         {
             this.runner = runner;
             this.onException = onException;
             this.task = null;
-        }
-
-        public PrivateRunnable(CountExceptableRunnerWrapper runner, BiConsumer<? super Exception, ? super BukkitTask> onException)
-        {
-            this.runner = runner;
-            this.onException = onException;
-            this.task = null;
+            this.count = new AtomicLong(0L);
         }
 
         @Override
@@ -1020,7 +950,10 @@ public class Runner
         {
             try
             {
-                this.runner.run();
+                if (this.runner instanceof CountExceptableRunner)
+                    ((CountExceptableRunner) this.runner).run(this.count.getAndIncrement());
+                else
+                    ((GeneralExceptableRunner) this.runner).run();
             }
             catch (Exception e)
             {
