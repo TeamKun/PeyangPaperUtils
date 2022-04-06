@@ -1,10 +1,9 @@
 package net.kunmc.lab.peyangpaperutils.lib.utils;
 
-import lombok.AllArgsConstructor;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.PluginClassLoader;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
@@ -12,20 +11,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * BukkitRunnableを簡単に実行するためのラッパーです。
  */
 public class Runner
 {
-    private static final BukkitScheduler SCHEDULER;
-
-    static
-    {
-        SCHEDULER = Bukkit.getScheduler();
-    }
-
     /**
      * Runnableを実行します。
      *
@@ -35,10 +27,11 @@ public class Runner
      * @return BukkitTask
      * @see BukkitScheduler#runTask(Plugin, Runnable)
      */
-    public static @NotNull BukkitTask run(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException)
+    public static @NotNull BukkitTask run(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException)
     {
         GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = SCHEDULER.runTask(plugin, new PrivateRunnable(runner, onException));
+        PrivateRunnable privateRunnable = new PrivateRunnable(runner, onException);
+        BukkitTask task = privateRunnable.runTask(plugin);
         runner.setTask(task);
         return task;
     }
@@ -52,10 +45,10 @@ public class Runner
      * @return BukkitTask
      * @see BukkitScheduler#runTaskAsynchronously(Plugin, Runnable)
      */
-    public static @NotNull BukkitTask runAsync(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException)
+    public static @NotNull BukkitTask runAsync(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException)
     {
         GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = SCHEDULER.runTaskAsynchronously(plugin, new PrivateRunnable(runner, onException));
+        BukkitTask task = new PrivateRunnable(runner, onException).runTaskAsynchronously(plugin);
         runner.setTask(task);
         return task;
     }
@@ -71,10 +64,10 @@ public class Runner
      * @see BukkitScheduler#runTaskLater(Plugin, Runnable, long)
      */
     public static @NotNull BukkitTask runLater(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable,
-                                               @Nullable Consumer<? super Exception> onException, long delay)
+                                               @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay)
     {
         GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = SCHEDULER.runTaskLater(plugin, new PrivateRunnable(runner, onException), delay);
+        BukkitTask task = new PrivateRunnable(runner, onException).runTaskLater(plugin, delay);
         runner.setTask(task);
         return task;
     }
@@ -90,10 +83,10 @@ public class Runner
      * @see BukkitScheduler#runTaskLaterAsynchronously(Plugin, Runnable, long)
      */
     public static @NotNull BukkitTask runLaterAsync(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable,
-                                                    @Nullable Consumer<? super Exception> onException, long delay)
+                                                    @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay)
     {
         GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = SCHEDULER.runTaskLaterAsynchronously(plugin, new PrivateRunnable(runner, onException), delay);
+        BukkitTask task = new PrivateRunnable(runner, onException).runTaskLaterAsynchronously(plugin, delay);
         runner.setTask(task);
         return task;
     }
@@ -110,10 +103,10 @@ public class Runner
      * @see BukkitScheduler#runTaskTimer(Plugin, Runnable, long, long)
      */
     public static @NotNull BukkitTask runTimer(@NotNull Plugin plugin, @Nullable GeneralExceptableRunner runnable,
-                                               @Nullable Consumer<? super Exception> onException, long delay, long period)
+                                               @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay, long period)
     {
         GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = SCHEDULER.runTaskTimer(plugin, new PrivateRunnable(runner, onException), delay, period);
+        BukkitTask task = new PrivateRunnable(runner, onException).runTaskTimer(plugin, delay, period);
         runner.setTask(task);
         return task;
     }
@@ -130,17 +123,17 @@ public class Runner
      * @see BukkitScheduler#runTaskTimerAsynchronously(Plugin, Runnable, long, long)
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull Plugin plugin, @Nullable GeneralExceptableRunner runnable,
-                                                    @Nullable Consumer<? super Exception> onException, long delay, long period)
+                                                    @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay, long period)
     {
         GeneralExceptableRunnerWrapper runner = new GeneralExceptableRunnerWrapper(runnable);
-        BukkitTask task = SCHEDULER.runTaskTimerAsynchronously(plugin, new PrivateRunnable(runner, onException), delay, period);
+        BukkitTask task = new PrivateRunnable(runner, onException).runTaskTimerAsynchronously(plugin, delay, period);
         runner.setTask(task);
         return task;
     }
 
     /**
      * Runnableを定期的に実行します。
-     * {@link  Runner#runTimer(Plugin, GeneralExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link  Runner#runTimer(Plugin, GeneralExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param plugin      Plugin
      * @param runnable    Runnable
@@ -150,14 +143,14 @@ public class Runner
      * @see BukkitScheduler#runTaskTimer(Plugin, Runnable, long, long)
      */
     public static @NotNull BukkitTask runTimer(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable,
-                                               @Nullable Consumer<? super Exception> onException, long period)
+                                               @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         return runTimer(plugin, runnable, onException, 0L, period);
     }
 
     /**
      * Runnableを定期的に非同期で実行します。
-     * {@link  Runner#runTimerAsync(Plugin, GeneralExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link  Runner#runTimerAsync(Plugin, GeneralExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param plugin      Plugin
      * @param runnable    Runnable
@@ -167,7 +160,7 @@ public class Runner
      * @see BukkitScheduler#runTaskTimerAsynchronously(Plugin, Runnable, long, long)
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull Plugin plugin, @NotNull GeneralExceptableRunner runnable,
-                                                    @Nullable Consumer<? super Exception> onException, long period)
+                                                    @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         return runTimerAsync(plugin, runnable, onException, 0L, period);
     }
@@ -184,10 +177,10 @@ public class Runner
      * @see BukkitScheduler#runTaskTimer(Plugin, Runnable, long, long)
      */
     public static @NotNull BukkitTask runTimer(@NotNull Plugin plugin, @Nullable CountExceptableRunner runnable,
-                                               @Nullable Consumer<? super Exception> onException, long delay, long period)
+                                               @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay, long period)
     {
         CountExceptableRunnerWrapper runner = new CountExceptableRunnerWrapper(runnable);
-        BukkitTask task = SCHEDULER.runTaskTimer(plugin, new PrivateRunnable(runner, onException), delay, period);
+        BukkitTask task = new PrivateRunnable(runner, onException).runTaskTimer(plugin, delay, period);
         runner.setTask(task);
         return task;
     }
@@ -204,17 +197,17 @@ public class Runner
      * @see BukkitScheduler#runTaskTimerAsynchronously(Plugin, Runnable, long, long)
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull Plugin plugin, @Nullable CountExceptableRunner runnable,
-                                                    @Nullable Consumer<? super Exception> onException, long delay, long period)
+                                                    @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay, long period)
     {
         CountExceptableRunnerWrapper runner = new CountExceptableRunnerWrapper(runnable);
-        BukkitTask task = SCHEDULER.runTaskTimerAsynchronously(plugin, new PrivateRunnable(runner, onException), delay, period);
+        BukkitTask task = new PrivateRunnable(runner, onException).runTaskTimerAsynchronously(plugin, delay, period);
         runner.setTask(task);
         return task;
     }
 
     /**
      * Runnableを指定チック経過後に定期的に実行します。
-     * {@link  Runner#runTimer(Plugin, CountExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link  Runner#runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param plugin      Plugin
      * @param runnable    Runnable
@@ -224,14 +217,14 @@ public class Runner
      * @see BukkitScheduler#runTaskTimer(Plugin, Runnable, long, long)
      */
     public static @NotNull BukkitTask runTimer(@NotNull Plugin plugin, @NotNull CountExceptableRunner runnable,
-                                               @Nullable Consumer<? super Exception> onException, long period)
+                                               @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         return runTimer(plugin, runnable, onException, 0L, period);
     }
 
     /**
      * Runnableを指定チック経過後に非同期で定期的に実行します。
-     * {@link  Runner#runTimerAsync(Plugin, CountExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link  Runner#runTimerAsync(Plugin, CountExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param plugin      Plugin
      * @param runnable    Runnable
@@ -241,7 +234,7 @@ public class Runner
      * @see BukkitScheduler#runTaskTimerAsynchronously(Plugin, Runnable, long, long)
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull Plugin plugin, @NotNull CountExceptableRunner runnable,
-                                                    @Nullable Consumer<? super Exception> onException, long period)
+                                                    @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         return runTimerAsync(plugin, runnable, onException, 0L, period);
     }
@@ -332,7 +325,7 @@ public class Runner
 
     /**
      * Runnableを定期的に実行します。
-     * {@link  Runner#runTimer(Plugin, GeneralExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link  Runner#runTimer(Plugin, GeneralExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param plugin   Plugin
      * @param runnable Runnable
@@ -391,7 +384,7 @@ public class Runner
 
     /**
      * Runnableを定期的に実行します。
-     * {@link  Runner#runTimer(Plugin, CountExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link  Runner#runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param plugin   Plugin
      * @param runnable Runnable
@@ -434,9 +427,9 @@ public class Runner
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #run(Plugin, GeneralExceptableRunner, Consumer)
+     * @see #run(Plugin, GeneralExceptableRunner, BiConsumer)
      */
-    public static @NotNull BukkitTask run(@NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException)
+    public static @NotNull BukkitTask run(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -453,9 +446,9 @@ public class Runner
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runAsync(Plugin, GeneralExceptableRunner, Consumer)
+     * @see #runAsync(Plugin, GeneralExceptableRunner, BiConsumer)
      */
-    public static @NotNull BukkitTask runAsync(@NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException)
+    public static @NotNull BukkitTask runAsync(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -473,9 +466,9 @@ public class Runner
      * @param delay       チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runLater(Plugin, GeneralExceptableRunner, Consumer, long)
+     * @see #runLater(Plugin, GeneralExceptableRunner, BiConsumer, long)
      */
-    public static @NotNull BukkitTask runLater(@NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long delay)
+    public static @NotNull BukkitTask runLater(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -493,9 +486,9 @@ public class Runner
      * @param delay       チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runLaterAsync(Plugin, GeneralExceptableRunner, Consumer, long)
+     * @see #runLaterAsync(Plugin, GeneralExceptableRunner, BiConsumer, long)
      */
-    public static @NotNull BukkitTask runLaterAsync(@NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long delay)
+    public static @NotNull BukkitTask runLaterAsync(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -514,9 +507,9 @@ public class Runner
      * @param delay       初回実行チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimer(Plugin, GeneralExceptableRunner, Consumer, long, long)
+     * @see #runTimer(Plugin, GeneralExceptableRunner, BiConsumer, long, long)
      */
-    public static @NotNull BukkitTask runTimer(@NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long period, long delay)
+    public static @NotNull BukkitTask runTimer(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -535,9 +528,9 @@ public class Runner
      * @param delay       初回実行チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimerAsync(Plugin, GeneralExceptableRunner, Consumer, long, long)
+     * @see #runTimerAsync(Plugin, GeneralExceptableRunner, BiConsumer, long, long)
      */
-    public static @NotNull BukkitTask runTimerAsync(@NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long period, long delay)
+    public static @NotNull BukkitTask runTimerAsync(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -549,16 +542,16 @@ public class Runner
 
     /**
      * Runnableを定期的に実行します。
-     * {@link #runTimer(Plugin, GeneralExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link #runTimer(Plugin, GeneralExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @param period      定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimer(Plugin, GeneralExceptableRunner, Consumer, long, long)
+     * @see #runTimer(Plugin, GeneralExceptableRunner, BiConsumer, long, long)
      */
-    public static @NotNull BukkitTask runTimer(@NotNull GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long period)
+    public static @NotNull BukkitTask runTimer(@NotNull GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -570,15 +563,15 @@ public class Runner
 
     /**
      * Runnableを定期的に非同期で実行します。
-     * {@link #runTimerAsync(Plugin, GeneralExceptableRunner, Consumer, long, long)} の第二引数には 0L が指定されます。
+     * {@link #runTimerAsync(Plugin, GeneralExceptableRunner, BiConsumer, long, long)} の第二引数には 0L が指定されます。
      *
      * @param runnable Runnable
      * @param period   定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimerAsync(Plugin, GeneralExceptableRunner, Consumer, long, long)
+     * @see #runTimerAsync(Plugin, GeneralExceptableRunner, BiConsumer, long, long)
      */
-    public static @NotNull BukkitTask runTimerAsync(GeneralExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long period)
+    public static @NotNull BukkitTask runTimerAsync(GeneralExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -596,9 +589,9 @@ public class Runner
      * @param period      定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimer(Plugin, CountExceptableRunner, Consumer, long, long)
+     * @see #runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)
      */
-    public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long period, long delay)
+    public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -617,9 +610,9 @@ public class Runner
      * @param delay       初回実行チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimerAsync(Plugin, CountExceptableRunner, Consumer, long, long)
+     * @see #runTimerAsync(Plugin, CountExceptableRunner, BiConsumer, long, long)
      */
-    public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long period, long delay)
+    public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period, long delay)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -631,16 +624,16 @@ public class Runner
 
     /**
      * Runnableを定期的に実行します。
-     * {@link #runTimer(Plugin, CountExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link #runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @param period      定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimer(Plugin, CountExceptableRunner, Consumer, long, long)
+     * @see #runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)
      */
-    public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long period)
+    public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -652,16 +645,16 @@ public class Runner
 
     /**
      * Runnableを定期的に非同期で実行します。
-     * {@link #runTimerAsync(Plugin, CountExceptableRunner, Consumer, long, long)} の第四引数には 0L が指定されます。
+     * {@link #runTimerAsync(Plugin, CountExceptableRunner, BiConsumer, long, long)} の第四引数には 0L が指定されます。
      *
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @param period      定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimerAsync(Plugin, CountExceptableRunner, Consumer, long, long)
+     * @see #runTimerAsync(Plugin, CountExceptableRunner, BiConsumer, long, long)
      */
-    public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, @Nullable Consumer<? super Exception> onException, long period)
+    public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, @Nullable BiConsumer<? super Exception, ? super BukkitTask> onException, long period)
     {
         Plugin plugin = getPlugin(MethodHandles.lookup().lookupClass());
 
@@ -832,7 +825,7 @@ public class Runner
      * @param period   定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimer(Plugin, CountExceptableRunner, Consumer, long, long)
+     * @see #runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)
      */
     public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, long period, long delay)
     {
@@ -851,7 +844,7 @@ public class Runner
      * @param period   定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimerAsync(Plugin, CountExceptableRunner, Consumer, long, long)
+     * @see #runTimerAsync(Plugin, CountExceptableRunner, BiConsumer, long, long)
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, long period, long delay)
     {
@@ -871,7 +864,7 @@ public class Runner
      * @param period   定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimer(Plugin, CountExceptableRunner, Consumer, long, long)
+     * @see #runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)
      */
     public static @NotNull BukkitTask runTimer(@NotNull CountExceptableRunner runnable, long period)
     {
@@ -891,7 +884,7 @@ public class Runner
      * @param period   定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
-     * @see #runTimerAsync(Plugin, CountExceptableRunner, Consumer, long, long)
+     * @see #runTimerAsync(Plugin, CountExceptableRunner, BiConsumer, long, long)
      */
     public static @NotNull BukkitTask runTimerAsync(@NotNull CountExceptableRunner runnable, long period)
     {
@@ -1000,16 +993,26 @@ public class Runner
         }
     }
 
-    @AllArgsConstructor
-    private static class PrivateRunnable implements Runnable
+    private static class PrivateRunnable extends BukkitRunnable
     {
         private final GeneralExceptableRunnerWrapper runner;
-        private final Consumer<? super Exception> onException;
+        private final BiConsumer<? super Exception, ? super BukkitTask> onException;
 
-        public PrivateRunnable(CountExceptableRunnerWrapper runner, Consumer<? super Exception> onException)
+        @Setter
+        private BukkitTask task;
+
+        public PrivateRunnable(GeneralExceptableRunnerWrapper runner, BiConsumer<? super Exception, ? super BukkitTask> onException)
         {
             this.runner = runner;
             this.onException = onException;
+            this.task = null;
+        }
+
+        public PrivateRunnable(CountExceptableRunnerWrapper runner, BiConsumer<? super Exception, ? super BukkitTask> onException)
+        {
+            this.runner = runner;
+            this.onException = onException;
+            this.task = null;
         }
 
         @Override
@@ -1022,7 +1025,7 @@ public class Runner
             catch (Exception e)
             {
                 if (this.onException != null)
-                    this.onException.accept(e);
+                    this.onException.accept(e, this.task);
                 else
                     e.printStackTrace();
             }
