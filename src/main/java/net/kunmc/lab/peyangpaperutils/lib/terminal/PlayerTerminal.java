@@ -26,7 +26,7 @@ class PlayerTerminal extends AbstractBukkitTerminal
     @Override
     public @NotNull Audience getAudience()
     {
-        return player;
+        return this.player;
     }
 
     @Override
@@ -38,11 +38,11 @@ class PlayerTerminal extends AbstractBukkitTerminal
     @Override
     public @NotNull Progressbar createProgressbar(@NotNull String name) throws IllegalStateException
     {
-        if (progressbars.containsKey(name))
+        if (this.progressbars.containsKey(name))
             throw new IllegalStateException("Progressbar with name " + name + " already exists!");
 
-        Progressbar progressbar = new PlayerProgressbar(player, PlayerProgressbar.ProgressbarType.BOSS_BAR);
-        progressbars.put(name, progressbar);
+        Progressbar progressbar = new PlayerProgressbar(this.player, PlayerProgressbar.ProgressbarType.BOSS_BAR);
+        this.progressbars.put(name, progressbar);
 
         return progressbar;
     }
@@ -50,13 +50,13 @@ class PlayerTerminal extends AbstractBukkitTerminal
     @Override
     public boolean removeProgressbar(@NotNull String name)
     {
-        return progressbars.remove(name) != null;
+        return this.progressbars.remove(name) != null;
     }
 
     @Override
     public @Nullable Progressbar getProgressbar(@NotNull String name)
     {
-        return progressbars.get(name);
+        return this.progressbars.get(name);
     }
 
     @Override

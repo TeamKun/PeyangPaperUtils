@@ -24,9 +24,9 @@ public final class PeyangPaperUtils extends JavaPlugin
     @Override
     public void onEnable()
     {
-        inputManager = new InputManager(this);
-        pluginCommandManager = new CommandManager(this, "peyangutils", "PeyangUtilsDebug", "peyangutils");
-        pluginCommandManager.registerCommand("debug", new PeyangDebugCommand());
+        this.inputManager = new InputManager(this);
+        this.pluginCommandManager = new CommandManager(this, "peyangutils", "PeyangUtilsDebug", "peyangutils");
+        this.pluginCommandManager.registerCommand("debug", new PeyangDebugCommand());
     }
 
     @Override

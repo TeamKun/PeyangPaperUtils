@@ -57,14 +57,14 @@ public class CommandManager implements CommandExecutor, TabCompleter
     public CommandManager(@NotNull JavaPlugin plugin, @NotNull String commandName, @NotNull String pluginName, @NotNull String permission)
     {
         this.commandName = commandName;
-        commands = new HashMap<>();
+        this.commands = new HashMap<>();
         this.permission = permission;
-        this.helpCommand = new CommandHelp(pluginName, commandName, permission + ".help", commands);
+        this.helpCommand = new CommandHelp(pluginName, commandName, permission + ".help", this.commands);
 
         plugin.getCommand(commandName).setExecutor(this);
         plugin.getCommand(commandName).setTabCompleter(this);
 
-        registerCommand("help", helpCommand);
+        registerCommand("help", this.helpCommand);
     }
 
     private static void injectSubcommand(String name, SubCommandWith command)
@@ -79,7 +79,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
     }
 
     public static List<String> handleTabComplete(@NotNull CommandSender sender, @NotNull String[] args,
-                                                 @NotNull Terminal terminal, @NotNull Map<String, CommandBase> commands)
+                                                 @NotNull Terminal terminal, @NotNull Map<String, ? extends CommandBase> commands)
     {
         List<String> completes = new ArrayList<>();
 
@@ -112,7 +112,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
      */
     public void registerCommand(@NotNull String commandName, @NotNull CommandBase command)
     {
-        commands.put(commandName, command);
+        this.commands.put(commandName, command);
 
         if (command instanceof SubCommandWith)
             injectSubcommand(this.commandName, (SubCommandWith) command);
@@ -129,18 +129,18 @@ public class CommandManager implements CommandExecutor, TabCompleter
 
         if (CommandBase.indicateArgsLengthInvalid(terminal, args, 1))
         {
-            helpCommand.onCommand(sender, terminal, new String[0]);
+            this.helpCommand.onCommand(sender, terminal, new String[0]);
             return true;
         }
 
-        if (!commands.containsKey(args[0]))
+        if (!this.commands.containsKey(args[0]))
         {
             terminal.error("サブコマンドが見つかりませんでした:  " + args[0]);
-            helpCommand.onCommand(sender, terminal, new String[0]);
+            this.helpCommand.onCommand(sender, terminal, new String[0]);
             return true;
         }
 
-        CommandBase commandBase = commands.get(args[0]);
+        CommandBase commandBase = this.commands.get(args[0]);
         if (commandBase.getPermission() != null && !sender.hasPermission(commandBase.getPermission()))
         {
             terminal.error("このコマンドを使用するには権限が必要です！");
@@ -158,7 +158,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
         if (!sender.hasPermission(this.permission))
             return null;
 
-        List<String> completes = handleTabComplete(sender, args, terminal, commands);
+        List<String> completes = handleTabComplete(sender, args, terminal, this.commands);
 
         ArrayList<String> result = new ArrayList<>();
 

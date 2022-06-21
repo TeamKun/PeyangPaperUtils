@@ -65,7 +65,7 @@ class CommandHelp extends CommandBase
             if (args.length > 1)
                 page = Integer.parseInt(args[1]);
             else if (args.length > 0)
-                if (args[0].matches("[0-9]+"))
+                if (args[0].matches("\\d+"))
                     page = Integer.parseInt(args[0]);
         }
         catch (NumberFormatException e)
@@ -80,22 +80,22 @@ class CommandHelp extends CommandBase
             return;
         }
 
-        buildHelpPage(terminal, pluginName, page, pageLengthMax, commands, subCommand ? args[0]: null);
+        buildHelpPage(terminal, this.pluginName, page, pageLengthMax, commands, subCommand ? args[0]: null);
     }
 
     private void send(Terminal terminal, TextComponent helpMessage, String commandName, int space_size, String subCommand)
     {
         terminal.write(suggestCommand(
-                of(ChatColor.AQUA + "/" + baseCommandName + " " + (subCommand != null ? subCommand + " ": "")
+                of(ChatColor.AQUA + "/" + this.baseCommandName + " " + (subCommand != null ? subCommand + " ": "")
                         + commandName + " " + StringUtils.repeat(" ", space_size - commandName.length()) + " - ")
                         .append(Component.text(ChatColor.DARK_AQUA.toString()))
                         .append(helpMessage.color(NamedTextColor.DARK_AQUA)),
-                "/" + baseCommandName + " " + (subCommand != null ? subCommand + " ": "") + commandName
+                "/" + this.baseCommandName + " " + (subCommand != null ? subCommand + " ": "") + commandName
         ));
     }
 
     private void buildHelpPage(Terminal terminal, String pluginName, int page, int pageLengthMax,
-                               Map<String, CommandBase> commands, String subcommandName)
+                               Map<String, ? extends CommandBase> commands, String subcommandName)
     {
         terminal.writeLine(ChatColor.GOLD + "-----=====    " + pluginName + " (" + page + "/" + pageLengthMax + ")  =====-----");
 
@@ -116,7 +116,7 @@ class CommandHelp extends CommandBase
 
         if (page > 1)
             footer = footer.append(of(ChatColor.GOLD + " [" + ChatColor.RED + "<<" + ChatColor.GOLD + "]")
-                    .clickEvent(ClickEvent.runCommand("/" + baseCommandName + " help " +
+                    .clickEvent(ClickEvent.runCommand("/" + this.baseCommandName + " help " +
                             (subcommandName == null ? "": subcommandName + " ") + (page - 1)))
                     .hoverEvent(HoverEvent.showText(of(ChatColor.AQUA + "クリックして前のページに戻る"))));
         else
@@ -126,7 +126,7 @@ class CommandHelp extends CommandBase
 
         if (page < pageLengthMax)
             footer = footer.append(of(ChatColor.GOLD + "[" + ChatColor.GREEN + ">>" + ChatColor.GOLD + "] ")
-                    .clickEvent(ClickEvent.runCommand("/" + baseCommandName + " help " +
+                    .clickEvent(ClickEvent.runCommand("/" + this.baseCommandName + " help " +
                             (subcommandName == null ? "": subcommandName + " ") + (page + 1)))
                     .hoverEvent(HoverEvent.showText(of(ChatColor.AQUA + "クリックして次のページに進む"))));
         else
@@ -151,7 +151,7 @@ class CommandHelp extends CommandBase
     @Override
     public @Nullable String getPermission()
     {
-        return permission;
+        return this.permission;
     }
 
     @Override

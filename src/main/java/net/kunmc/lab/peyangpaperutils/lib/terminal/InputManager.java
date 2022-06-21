@@ -28,7 +28,7 @@ public class InputManager implements Listener
 
     public InputManager(PeyangPaperUtils plugin)
     {
-        inputTasks = new HashMap<>();
+        this.inputTasks = new HashMap<>();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 

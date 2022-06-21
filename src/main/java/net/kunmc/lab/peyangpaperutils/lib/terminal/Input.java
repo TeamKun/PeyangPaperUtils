@@ -24,8 +24,8 @@ public class Input
 
     private UUID getUUID()
     {
-        if (terminal.getAudience() instanceof Player)
-            return ((Player) terminal.getAudience()).getUniqueId();
+        if (this.terminal.getAudience() instanceof Player)
+            return ((Player) this.terminal.getAudience()).getUniqueId();
 
         return null;
     }
@@ -50,7 +50,7 @@ public class Input
         attrs[attrs.length - 2] = QuestionAttribute.YES;
         attrs[attrs.length - 1] = QuestionAttribute.NO;
 
-        return registerInputTask(new Question(terminal.getAudience(), question, this,
+        return registerInputTask(new Question(this.terminal.getAudience(), question, this,
                 attrs
         ));
     }
@@ -71,7 +71,7 @@ public class Input
         attrs[attrs.length - 2] = QuestionAttribute.YES;
         attrs[attrs.length - 1] = QuestionAttribute.NO;
 
-        return registerInputTask(new Question(terminal.getAudience(), question, this, attrs));
+        return registerInputTask(new Question(this.terminal.getAudience(), question, this, attrs));
     }
 
     /**
@@ -82,7 +82,7 @@ public class Input
      */
     public @NotNull Question showInputQuestion(@NotNull String question)
     {
-        return registerInputTask(new Question(terminal.getAudience(), question, this));
+        return registerInputTask(new Question(this.terminal.getAudience(), question, this));
     }
 
     /**
@@ -94,7 +94,7 @@ public class Input
      */
     public @NotNull Question showChoiceQuestion(@NotNull String question, String... choices)
     {
-        return registerInputTask(new Question(terminal.getAudience(), question, this, new AttributeChoice(choices)));
+        return registerInputTask(new Question(this.terminal.getAudience(), question, this, new AttributeChoice(choices)));
     }
 
     /**
@@ -106,7 +106,7 @@ public class Input
      */
     public @NotNull Question showChoiceQuestion(@NotNull String question, @NotNull HashMap<String, String> choices)
     {
-        return registerInputTask(new Question(terminal.getAudience(), question, this, new AttributeChoice(choices)));
+        return registerInputTask(new Question(this.terminal.getAudience(), question, this, new AttributeChoice(choices)));
     }
 
     /**
@@ -118,7 +118,7 @@ public class Input
      */
     public @NotNull Question showQuestion(@NotNull String question, @NotNull QuestionAttribute... attributes)
     {
-        return registerInputTask(new Question(terminal.getAudience(), question, this, attributes));
+        return registerInputTask(new Question(this.terminal.getAudience(), question, this, attributes));
     }
 
     /**
