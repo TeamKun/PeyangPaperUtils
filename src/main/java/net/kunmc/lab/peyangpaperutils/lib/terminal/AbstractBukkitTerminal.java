@@ -19,28 +19,37 @@ abstract class AbstractBukkitTerminal implements Terminal
         this.input = new Input(this);
     }
 
+    private static String safeFormat(String format, Object[] args)
+    {
+        // String.format()の第二引数は可変数のため, Object... argsで受け取った値を与えると, [args] となる.
+        // そのため, このようなメソッドで明示的にする.
+        // これを使用しない方法は, String.format時に明示的に (Object[]) args をする必要があるが,
+        // とりあえずこちらを推奨する.
+        return String.format(format, args);
+    }
+
     @Override
     public void info(@NotNull String message, Object... args)
     {
-        writeLine(String.format(ChatColor.BLUE + "I: " + message, args));
+        writeLine(safeFormat(ChatColor.BLUE + "I: " + message, args));
     }
 
     @Override
     public void error(@NotNull String message, Object... args)
     {
-        writeLine(String.format(ChatColor.RED + "E: " + message, args));
+        writeLine(safeFormat(ChatColor.RED + "E: " + message, args));
     }
 
     @Override
     public void success(@NotNull String message, Object... args)
     {
-        writeLine(String.format(ChatColor.GREEN + "S: " + message, args));
+        writeLine(safeFormat(ChatColor.GREEN + "S: " + message, args));
     }
 
     @Override
     public void warn(@NotNull String message, Object... args)
     {
-        writeLine(String.format(ChatColor.YELLOW + "W: " + message, args));
+        writeLine(safeFormat(ChatColor.YELLOW + "W: " + message, args));
     }
 
     @Override
@@ -52,6 +61,6 @@ abstract class AbstractBukkitTerminal implements Terminal
     @Override
     public void write(@NotNull Component component)
     {
-        audience.sendMessage(component);
+        this.audience.sendMessage(component);
     }
 }
