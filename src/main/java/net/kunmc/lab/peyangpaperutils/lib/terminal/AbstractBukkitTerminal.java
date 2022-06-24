@@ -26,6 +26,7 @@ abstract class AbstractBukkitTerminal implements Terminal
      * そのため, このようなメソッドで明示的にする.
      * これを使用しない方法は, String.format時に明示的に (Object[]) args をする必要があるが,
      * とりあえずこちらを推奨する.
+     * </p>
      *
      * @param format フォーマット文字列
      * @param args   引数
