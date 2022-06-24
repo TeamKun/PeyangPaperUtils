@@ -19,12 +19,23 @@ abstract class AbstractBukkitTerminal implements Terminal
         this.input = new Input(this);
     }
 
-    private static String safeFormat(String format, Object[] args)
+    /**
+     * メッセージをフォーマットする.
+     * <p>
+     * String.format()の第二引数は可変数のため, Object... argsで受け取った値を与えると, [args] となる.
+     * そのため, このようなメソッドで明示的にする.
+     * これを使用しない方法は, String.format時に明示的に (Object[]) args をする必要があるが,
+     * とりあえずこちらを推奨する.
+     *
+     * @param format フォーマット文字列
+     * @param args   引数
+     * @return フォーマットされた文字列
+     */
+    private static @NotNull String safeFormat(@NotNull String format, @NotNull Object[] args)
     {
-        // String.format()の第二引数は可変数のため, Object... argsで受け取った値を与えると, [args] となる.
-        // そのため, このようなメソッドで明示的にする.
-        // これを使用しない方法は, String.format時に明示的に (Object[]) args をする必要があるが,
-        // とりあえずこちらを推奨する.
+        if (args.length == 0)
+            return format;
+
         return String.format(format, args);
     }
 
