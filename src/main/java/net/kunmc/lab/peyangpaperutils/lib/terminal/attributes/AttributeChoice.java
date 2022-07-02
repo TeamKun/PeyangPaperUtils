@@ -17,9 +17,10 @@ public class AttributeChoice implements QuestionAttribute
 
     public AttributeChoice(String... choices)
     {
+        int count = 0;
         this.choices = new LinkedHashMap<>(choices.length);
         for (String choice : choices)
-            this.choices.put(choice.toLowerCase(), choice);
+            this.choices.put(String.valueOf(++count), choice);
     }
 
     @Override
