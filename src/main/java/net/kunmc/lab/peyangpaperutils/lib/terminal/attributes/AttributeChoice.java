@@ -32,11 +32,8 @@ public class AttributeChoice implements QuestionAttribute
     @Override
     public boolean isMatch(@NotNull String input)
     {
-        for (String choice : this.choices.values())
-            if (choice.startsWith(input.toLowerCase()))
-                return true;
-
-        return false;
+        return this.choices.entrySet().stream().parallel()
+                .anyMatch(entry -> entry.getKey().equalsIgnoreCase(input));
     }
 
     @Override
