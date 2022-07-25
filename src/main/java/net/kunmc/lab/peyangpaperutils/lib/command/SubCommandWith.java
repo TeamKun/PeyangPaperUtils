@@ -14,8 +14,7 @@ import java.util.Map;
  */
 public abstract class SubCommandWith extends CommandBase
 {
-    // This field will rewrite by the reflection.
-    private final String commandName = null;
+    private String commandName;
 
     /**
      * この名前を返します。
@@ -38,7 +37,7 @@ public abstract class SubCommandWith extends CommandBase
     {
         if (indicateArgsLengthInvalid(terminal, args, 1))
         {
-            Bukkit.dispatchCommand(sender, commandName + " help " + getName());
+            Bukkit.dispatchCommand(sender, this.commandName + " help " + getName());
             return;
         }
 
@@ -47,7 +46,7 @@ public abstract class SubCommandWith extends CommandBase
         if (!commands.containsKey(args[0]))
         {
             terminal.error("サブコマンドが見つかりませんでした: " + args[0]);
-            Bukkit.dispatchCommand(sender, commandName + " help " + getName());
+            Bukkit.dispatchCommand(sender, this.commandName + " help " + getName());
             return;
         }
 
@@ -73,5 +72,17 @@ public abstract class SubCommandWith extends CommandBase
                 required("subcommand", "string"),
                 optional("args", "string[]")
         };
+    }
+
+    public final String getCommandName()
+    {
+        return this.commandName;
+    }
+
+    public final void setCommandName(String commandName)
+    {
+        if (this.commandName != null)
+            throw new IllegalStateException("commandName is already set");
+        this.commandName = commandName;
     }
 }

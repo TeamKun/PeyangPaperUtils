@@ -13,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,26 +26,9 @@ public class CommandManager implements CommandExecutor, TabCompleter
 {
     public static final String ALIAS_PREFIX = "\0alias\0";
 
-    private static final Field subcommandNameField;
-
     private final HashMap<String, CommandBase> commands;
     private final String permission;
     private final CommandBase helpCommand;
-
-    static
-    {
-        try
-        {
-            subcommandNameField = SubCommandWith.class.getDeclaredField("commandName");
-            subcommandNameField.setAccessible(true);
-        }
-        catch (NoSuchFieldException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private final String commandName;
 
     /**
      * コマンドマネジャのコンストラクタです。
@@ -59,7 +41,6 @@ public class CommandManager implements CommandExecutor, TabCompleter
     @SuppressWarnings("ConstantConditions")
     public CommandManager(@NotNull JavaPlugin plugin, @NotNull String commandName, @NotNull String pluginName, @NotNull String permission)
     {
-        this.commandName = commandName;
         this.commands = new HashMap<>();
         this.permission = permission;
         this.helpCommand = new CommandHelp(pluginName, commandName, permission + ".help", this.commands);
@@ -68,17 +49,6 @@ public class CommandManager implements CommandExecutor, TabCompleter
         plugin.getCommand(commandName).setTabCompleter(this);
 
         registerCommand("help", this.helpCommand);
-    }
-
-    private static void injectSubcommand(String name, SubCommandWith command)
-    {
-        try
-        {
-            subcommandNameField.set(command, name);
-        }
-        catch (IllegalAccessException ignored)
-        {
-        }
     }
 
     public static List<String> handleTabComplete(@NotNull CommandSender sender, @NotNull String[] args,
@@ -127,7 +97,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
                 this.commands.put(ALIAS_PREFIX + aliasName, command);
 
         if (command instanceof SubCommandWith)
-            injectSubcommand(this.commandName, (SubCommandWith) command);
+            ((SubCommandWith) command).setCommandName(commandName);
     }
 
     @Override
