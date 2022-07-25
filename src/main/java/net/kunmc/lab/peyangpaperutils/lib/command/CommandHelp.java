@@ -104,6 +104,7 @@ class CommandHelp extends CommandBase
         int maxLengthOfLine = commands.keySet().stream().mapToInt(String::length).max().orElse(0);
 
         commands.entrySet().stream()
+                .filter(entry -> !entry.getKey().startsWith(CommandManager.ALIAS_PREFIX))
                 .skip(start)
                 .limit(end - start)
                 .forEach(entry -> send(terminal, entry.getValue().getHelpOneLine().append(

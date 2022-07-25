@@ -25,7 +25,10 @@ import java.util.Map;
  */
 public class CommandManager implements CommandExecutor, TabCompleter
 {
+    public static final String ALIAS_PREFIX = "\0alias\0";
+
     private static final Field subcommandNameField;
+
     private final HashMap<String, CommandBase> commands;
     private final String permission;
     private final CommandBase helpCommand;
@@ -84,11 +87,13 @@ public class CommandManager implements CommandExecutor, TabCompleter
         List<String> completes = new ArrayList<>();
 
         if (args.length == 1)
-            completes.addAll(commands.keySet());
+            commands.keySet().stream().filter(key -> !key.startsWith(ALIAS_PREFIX)).forEach(completes::add);
 
-        else if (commands.containsKey(args[0]))
+        else if (commands.containsKey(args[0]) || commands.containsKey(ALIAS_PREFIX + args[0]))
         {
             CommandBase commandBase = commands.get(args[0]);
+            if (commandBase == null)
+                commandBase = commands.get(ALIAS_PREFIX + args[0]);
 
             if (commandBase.getPermission() != null && !sender.hasPermission(commandBase.getPermission()))
                 return completes;
@@ -110,9 +115,16 @@ public class CommandManager implements CommandExecutor, TabCompleter
      * @param commandName コマンド名
      * @param command     コマンド
      */
-    public void registerCommand(@NotNull String commandName, @NotNull CommandBase command)
+    public void registerCommand(@NotNull String commandName, @NotNull CommandBase command, String... alias)
     {
+        if (commandName.startsWith(ALIAS_PREFIX))
+            throw new IllegalArgumentException("コマンド名に予約語が含まれています.");
+
         this.commands.put(commandName, command);
+
+        if (alias != null)
+            for (String aliasName : alias)
+                this.commands.put(ALIAS_PREFIX + aliasName, command);
 
         if (command instanceof SubCommandWith)
             injectSubcommand(this.commandName, (SubCommandWith) command);
@@ -133,7 +145,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
             return true;
         }
 
-        if (!this.commands.containsKey(args[0]))
+        if (!(this.commands.containsKey(args[0]) || this.commands.containsKey(ALIAS_PREFIX + args[0])))
         {
             terminal.error("サブコマンドが見つかりませんでした:  " + args[0]);
             this.helpCommand.onCommand(sender, terminal, new String[0]);
@@ -141,6 +153,9 @@ public class CommandManager implements CommandExecutor, TabCompleter
         }
 
         CommandBase commandBase = this.commands.get(args[0]);
+        if (commandBase == null)
+            commandBase = this.commands.get(ALIAS_PREFIX + args[0]);
+
         if (commandBase.getPermission() != null && !sender.hasPermission(commandBase.getPermission()))
         {
             terminal.error("このコマンドを使用するには権限が必要です！");
