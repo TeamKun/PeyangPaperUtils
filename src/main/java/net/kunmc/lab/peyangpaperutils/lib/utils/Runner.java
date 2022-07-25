@@ -58,7 +58,7 @@ public class Runner
      * @param plugin      Plugin
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
-     * @param delay       チック数
+     * @param delay       遅らせるチック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskLater(Plugin, Runnable, long)
      */
@@ -77,7 +77,7 @@ public class Runner
      * @param plugin      Plugin
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
-     * @param delay       チック数
+     * @param delay       遅らせるチック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskLaterAsynchronously(Plugin, Runnable, long)
      */
@@ -96,7 +96,7 @@ public class Runner
      * @param plugin      Plugin
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
-     * @param delay       チック数
+     * @param delay       遅らせるチック数
      * @param period      定期チック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskTimer(Plugin, Runnable, long, long)
@@ -116,7 +116,7 @@ public class Runner
      * @param plugin      Plugin
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
-     * @param delay       チック数
+     * @param delay       遅らせるチック数
      * @param period      定期チック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskTimerAsynchronously(Plugin, Runnable, long, long)
@@ -170,7 +170,7 @@ public class Runner
      * @param plugin      Plugin
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
-     * @param delay       チック数
+     * @param delay       遅らせるチック数
      * @param period      定期チック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskTimer(Plugin, Runnable, long, long)
@@ -190,7 +190,7 @@ public class Runner
      * @param plugin      Plugin
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
-     * @param delay       チック数
+     * @param delay       遅らせるチック数
      * @param period      定期チック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskTimerAsynchronously(Plugin, Runnable, long, long)
@@ -269,7 +269,7 @@ public class Runner
      *
      * @param plugin   Plugin
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskLater(Plugin, Runnable, long)
      */
@@ -283,7 +283,7 @@ public class Runner
      *
      * @param plugin   Plugin
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskLaterAsynchronously(Plugin, Runnable, long)
      */
@@ -297,7 +297,7 @@ public class Runner
      *
      * @param plugin   Plugin
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @param period   定期チック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskTimer(Plugin, Runnable, long, long)
@@ -312,7 +312,7 @@ public class Runner
      *
      * @param plugin   Plugin
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @param period   定期チック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskTimerAsynchronously(Plugin, Runnable, long, long)
@@ -356,7 +356,7 @@ public class Runner
      *
      * @param plugin   Plugin
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @param period   定期チック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskTimer(Plugin, Runnable, long, long)
@@ -371,7 +371,7 @@ public class Runner
      *
      * @param plugin   Plugin
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @param period   定期チック数
      * @return BukkitTask
      * @see BukkitScheduler#runTaskTimerAsynchronously(Plugin, Runnable, long, long)
@@ -458,7 +458,7 @@ public class Runner
      *
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
-     * @param delay       チック数
+     * @param delay       遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runLater(Plugin, GeneralExceptableRunner, BiConsumer, long)
@@ -474,7 +474,7 @@ public class Runner
      *
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
-     * @param delay       チック数
+     * @param delay       遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runLaterAsync(Plugin, GeneralExceptableRunner, BiConsumer, long)
@@ -491,7 +491,7 @@ public class Runner
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @param period      定期チック数
-     * @param delay       初回実行チック数
+     * @param delay       遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runTimer(Plugin, GeneralExceptableRunner, BiConsumer, long, long)
@@ -508,7 +508,7 @@ public class Runner
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @param period      定期チック数
-     * @param delay       初回実行チック数
+     * @param delay       遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runTimerAsync(Plugin, GeneralExceptableRunner, BiConsumer, long, long)
@@ -540,8 +540,9 @@ public class Runner
      * Runnableを定期的に非同期で実行します。
      * {@link #runTimerAsync(Plugin, GeneralExceptableRunner, BiConsumer, long, long)} の第二引数には 0L が指定されます。
      *
-     * @param runnable Runnable
-     * @param period   定期チック数
+     * @param runnable    Runnable
+     * @param onException 実行中に例外が発生した場合に呼び出されるBiConsumer
+     * @param period      定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runTimerAsync(Plugin, GeneralExceptableRunner, BiConsumer, long, long)
@@ -558,6 +559,7 @@ public class Runner
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @param period      定期チック数
+     * @param delay       遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)
@@ -574,7 +576,7 @@ public class Runner
      * @param runnable    Runnable
      * @param onException 実行中に例外が発生した場合に呼び出されるRunnable
      * @param period      定期チック数
-     * @param delay       初回実行チック数
+     * @param delay       遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runTimerAsync(Plugin, CountExceptableRunner, BiConsumer, long, long)
@@ -649,7 +651,7 @@ public class Runner
      * Runnableを指定チック経過後に実行します。
      *
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runLater(Plugin, GeneralExceptableRunner, long)
@@ -663,7 +665,7 @@ public class Runner
      * Runnableを指定チック経過後に非同期で実行します。
      *
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runLaterAsync(Plugin, GeneralExceptableRunner, long)
@@ -677,7 +679,7 @@ public class Runner
      * Runnableを定期的に実行します。
      *
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @param period   定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
@@ -692,7 +694,7 @@ public class Runner
      * Runnableを定期的に非同期で実行します。
      *
      * @param runnable Runnable
-     * @param delay    チック数
+     * @param delay    遅らせるチック数
      * @param period   定期チック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
@@ -738,6 +740,7 @@ public class Runner
      *
      * @param runnable Runnable
      * @param period   定期チック数
+     * @param delay    遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runTimer(Plugin, CountExceptableRunner, BiConsumer, long, long)
@@ -752,6 +755,7 @@ public class Runner
      *
      * @param runnable Runnable
      * @param period   定期チック数
+     * @param delay    遅らせるチック数
      * @return BukkitTask
      * @throws IllegalArgumentException プラグインが特定できない場合
      * @see #runTimerAsync(Plugin, CountExceptableRunner, BiConsumer, long, long)
@@ -804,6 +808,7 @@ public class Runner
         /**
          * 実行します。
          * 初期値は0です。
+         * @param count 実行回数
          *
          * @throws Exception 例外
          */

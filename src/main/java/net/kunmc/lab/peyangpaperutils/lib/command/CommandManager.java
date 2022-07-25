@@ -84,6 +84,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
      *
      * @param commandName コマンド名
      * @param command     コマンド
+     * @param alias       エイリアス
      */
     public void registerCommand(@NotNull String commandName, @NotNull CommandBase command, String... alias)
     {
