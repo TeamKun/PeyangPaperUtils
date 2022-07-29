@@ -29,6 +29,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
     private final HashMap<String, CommandBase> commands;
     private final String permission;
     private final CommandBase helpCommand;
+    private final String rootCommandName;
 
     /**
      * コマンドマネジャのコンストラクタです。
@@ -44,6 +45,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
         this.commands = new HashMap<>();
         this.permission = permission;
         this.helpCommand = new CommandHelp(pluginName, commandName, permission + ".help", this.commands);
+        this.rootCommandName = commandName;
 
         plugin.getCommand(commandName).setExecutor(this);
         plugin.getCommand(commandName).setTabCompleter(this);
@@ -98,7 +100,7 @@ public class CommandManager implements CommandExecutor, TabCompleter
                 this.commands.put(ALIAS_PREFIX + aliasName, command);
 
         if (command instanceof SubCommandWith)
-            ((SubCommandWith) command).setCommandName(commandName);
+            ((SubCommandWith) command).setRootCommandName(this.rootCommandName);
     }
 
     @Override
