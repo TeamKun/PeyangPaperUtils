@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.kunmc.lab.peyangpaperutils.lib.command.CommandManager;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.InputManager;
 import net.kunmc.lab.peyangpaperutils.plugin.commands.PeyangDebugCommand;
+import net.kunmc.lab.peyangpaperutils.plugin.retrieving.Retriever;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PeyangPaperUtils extends JavaPlugin
@@ -27,11 +28,13 @@ public final class PeyangPaperUtils extends JavaPlugin
         this.inputManager = new InputManager(this);
         this.pluginCommandManager = new CommandManager(this, "peyangutils", "PeyangUtilsDebug", "peyangutils");
         this.pluginCommandManager.registerCommand("debug", new PeyangDebugCommand());
+
+        Retriever.onEnable();
     }
 
     @Override
     public void onDisable()
     {
-        // Plugin shutdown logic
+        Retriever.onDisable();
     }
 }
