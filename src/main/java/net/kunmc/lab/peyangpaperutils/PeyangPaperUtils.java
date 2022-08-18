@@ -87,6 +87,7 @@ public final class PeyangPaperUtils extends JavaPlugin
                 try
                 {
                     ulc.loadClass(className);
+                    Class.forName(className);
                     count.incrementAndGet();
                 }
                 catch (Exception e)
