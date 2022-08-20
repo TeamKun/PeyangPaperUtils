@@ -187,7 +187,7 @@ public abstract class CommandBase
      */
     protected static boolean indicatePlayer(@NotNull Terminal terminal)
     {
-        if (terminal.isPlayer())
+        if (!terminal.isPlayer())
         {
             terminal.error("このコマンドはプレイヤーからのみ実行できます！");
             return true;
