@@ -4,15 +4,23 @@
 
 ## [JavaDoc](https://teamkun.github.io/PeyangPaperUtils/)
 
+## 注意
+
++ このライブラリは基本的には `provided` スコープで使うことを推奨しますが、一応 `compile` スコープでも使用できます。
++ `compile`スコープで使用するときは, パッケージを自分のパッケージに再配置することもできますが, 以下の機能が使用できなくなります：
+  - プログレスバー
+  - 通知
+  - 質問システム
+
 ## いまあるもの
 
 + ターミナル
-    + プレイヤとコンソールの入出力を統一
-    + 標準出力/プログレスバー/通知
-    + `Terminal#success`, `Terminal#error`, `Terminal#info`, `Terminal#warn` などつよつよなメソッドいっぱい。
-    + ターミナルは `Terminals.of(CommandSender|Audience|Player)` または `Terminals.ofConsole()` で取得できる。
+  + プレイヤとコンソールの入出力を統一
+  + 標準出力/プログレスバー/通知
+  + `Terminal#success`, `Terminal#error`, `Terminal#info`, `Terminal#warn` などつよつよなメソッドいっぱい。
+  + ターミナルは `Terminals.of(CommandSender|Audience|Player)` または `Terminals.ofConsole()` で取得できる。
 + 質問システム
-    + プレイヤ/コンソールに質問できる
+  + プレイヤ/コンソールに質問できる
     + Yes/No, Cancel, Apply for ALL とかがある。
     + 質問にはキューがあり、一つ一つ、回答されたら次の質問にうつる。
 + コマンドシステム
