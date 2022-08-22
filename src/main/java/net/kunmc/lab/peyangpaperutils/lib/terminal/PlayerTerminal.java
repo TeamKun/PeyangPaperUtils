@@ -1,6 +1,8 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
+import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,9 +13,10 @@ import java.util.HashMap;
  * プレイヤのターミナルです。
  * コンストラクタからインスタンスを生成せずに、 {@link Terminals#of(Player)} で取得してください。
  */
-class PlayerTerminal extends AbstractBukkitTerminal
+public class PlayerTerminal extends AbstractBukkitTerminal
 {
-    private final Player player;
+    @Getter
+    private Player player;
     private final HashMap<String, Progressbar> progressbars;
 
     PlayerTerminal(Player player)
@@ -71,5 +74,14 @@ class PlayerTerminal extends AbstractBukkitTerminal
     public void clearNotification()
     {
         this.player.clearTitle();
+    }
+
+    /**
+     * プレイヤーインスタンスを取得し直します。
+     */
+    public void updatePlayer()
+    {
+        this.player = Bukkit.getPlayer(this.player.getUniqueId());
+        this.setAudience(this.player);
     }
 }

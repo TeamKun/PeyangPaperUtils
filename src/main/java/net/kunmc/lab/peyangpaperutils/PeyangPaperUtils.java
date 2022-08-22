@@ -3,7 +3,14 @@ package net.kunmc.lab.peyangpaperutils;
 import lombok.Getter;
 import net.kunmc.lab.peyangpaperutils.lib.command.CommandManager;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.InputManager;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.PlayerTerminal;
+import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminals;
 import net.kunmc.lab.peyangpaperutils.plugin.commands.PeyangDebugCommand;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -15,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.jar.JarFile;
 
-public final class PeyangPaperUtils extends JavaPlugin
+public final class PeyangPaperUtils extends JavaPlugin implements Listener
 {
     @Getter
     private static PeyangPaperUtils instance;
@@ -44,6 +51,20 @@ public final class PeyangPaperUtils extends JavaPlugin
         this.getLogger().info("Loading classes...");
 
         this.loadClasses();
+
+        Bukkit.getPluginManager().registerEvents(this, this);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event)
+    {
+        ((PlayerTerminal) Terminals.of(event.getPlayer())).updatePlayer();
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event)
+    {
+        Terminals.purge(event.getPlayer());
     }
 
     private void loadClasses()

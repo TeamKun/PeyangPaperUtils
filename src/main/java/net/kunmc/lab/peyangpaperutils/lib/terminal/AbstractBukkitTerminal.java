@@ -1,6 +1,8 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -9,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 abstract class AbstractBukkitTerminal implements Terminal
 {
     @Getter
-    private final Audience audience;
+    @Setter(AccessLevel.PROTECTED)
+    private Audience audience;
     @Getter
     private final Input input;
 

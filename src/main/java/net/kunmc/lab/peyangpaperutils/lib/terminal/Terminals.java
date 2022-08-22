@@ -48,7 +48,8 @@ public class Terminals
     {
         Terminal terminal = terminals.get(player.getUniqueId());
         if (terminal != null)
-            return terminal;
+            if (player.isOnline())
+                return terminal;
 
         terminal = new PlayerTerminal(player);
         terminals.put(player.getUniqueId(), terminal);
@@ -80,5 +81,28 @@ public class Terminals
         terminal = new ConsoleTerminal();
         terminals.put(null, terminal);
         return terminal;
+    }
+
+    /**
+     * 指定されたターミナルを破棄します。
+     *
+     * @param terminal ターミナル
+     */
+    public static void purge(@NotNull Terminal terminal)
+    {
+        if (terminal instanceof PlayerTerminal)
+            terminals.remove(((PlayerTerminal) terminal).getPlayer().getUniqueId());
+        else if (terminal instanceof ConsoleTerminal)
+            terminals.remove(null);
+    }
+
+    /**
+     * 指定されたターミナルを破棄します。
+     *
+     * @param player プレイヤー
+     */
+    public static void purge(@NotNull Player player)
+    {
+        terminals.remove(player.getUniqueId());
     }
 }
