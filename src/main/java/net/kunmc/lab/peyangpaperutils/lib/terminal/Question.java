@@ -223,7 +223,7 @@ public class Question
     private void printChoices(Terminal terminal, Map<String, String> choices)
     {
         choices.forEach((value, text) -> terminal.write(
-                Component.text(ChatColor.YELLOW + value +
+                Component.text(ChatColor.GOLD + "✵ " + ChatColor.YELLOW + value +
                                 " - " + ChatColor.GREEN + text)
                         .clickEvent(ClickEvent.runCommand(getAnswerCommand(value)))
                         .hoverEvent(HoverEvent.showText(
@@ -240,11 +240,14 @@ public class Question
         Terminal terminal = this.input.getTerminal();
 
         printSeparator(terminal);
-        terminal.writeLine(ChatColor.GREEN + this.question);
+        terminal.writeLine("");
+        terminal.writeLine(ChatColor.GOLD + "➤ " + ChatColor.GREEN + this.question);
+        terminal.writeLine("");
 
         terminal.writeLine("       ---- " +
                 ChatColor.GREEN + "回答を入力" +
                 (terminal.isPlayer() ? "するか、回答をクリック": "") + "してください。" + ChatColor.WHITE + " ----");
+        terminal.writeLine("");
 
         Map<String, String> choices = getChoices();
         if (choices != null)
