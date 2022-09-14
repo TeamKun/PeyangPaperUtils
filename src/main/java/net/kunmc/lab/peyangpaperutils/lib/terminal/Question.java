@@ -103,15 +103,15 @@ public class Question
      */
     public void setAnswer(@NotNull String value)
     {
-        if (valuePresent)
+        if (this.valuePresent)
             throw new IllegalStateException("value is already set");
 
         this.result = new QuestionResultIImplement(value, detectValidAttributes(value));
         this.value = value;
         this.valuePresent = true;
-        synchronized (locker)
+        synchronized (this.locker)
         {
-            locker.notifyAll();
+            this.locker.notifyAll();
         }
     }
 
@@ -122,12 +122,12 @@ public class Question
      */
     public void waitForAnswer() throws InterruptedException
     {
-        if (valuePresent)
+        if (this.valuePresent)
             return;
 
-        synchronized (locker)
+        synchronized (this.locker)
         {
-            locker.wait();
+            this.locker.wait();
         }
     }
 
@@ -138,7 +138,7 @@ public class Question
      */
     public boolean isResultAvailable()
     {
-        return valuePresent;
+        return this.valuePresent;
     }
 
     /**
@@ -146,11 +146,11 @@ public class Question
      */
     public void cancel()
     {
-        if (valuePresent)
+        if (this.valuePresent)
             return;
-        synchronized (locker)
+        synchronized (this.locker)
         {
-            locker.notifyAll();
+            this.locker.notifyAll();
         }
     }
 
@@ -179,8 +179,22 @@ public class Question
 
     private void printSeparator(Terminal terminal)
     {
-        terminal.writeLine(ChatColor.BLUE + ChatColor.STRIKETHROUGH.toString() +
-                "================================================================================");
+        printSeparator(terminal, 53);
+    }
+
+    private void printSeparator(Terminal terminal, int size)
+    {
+        int maxSize = 53;
+        if (size > maxSize)
+            size = maxSize;
+        int centerSpace = (maxSize - size) / 2;
+
+        String center = StringUtils.repeat(" ", centerSpace);
+        String separator = StringUtils.repeat("-", size);
+
+        String line = center + separator;
+
+        terminal.writeLine(ChatColor.BLUE + ChatColor.STRIKETHROUGH.toString() + line);
     }
 
     private void printChoices(Terminal terminal, Map<String, String> choices)
@@ -200,22 +214,14 @@ public class Question
      */
     public void printQuestion()
     {
-        Terminal terminal = input.getTerminal();
+        Terminal terminal = this.input.getTerminal();
 
         printSeparator(terminal);
-        terminal.writeLine(ChatColor.GREEN + StringUtils.repeat(" ", 40 - (question.length() / 2)) + question);
+        terminal.writeLine(ChatColor.GREEN + this.question);
 
-        if (this.attributes.isEmpty())
-        {
-            terminal.writeLine("        ---- " + ChatColor.GREEN +
-                    "回答をチャットまたはコンソールに入力してください。" + ChatColor.WHITE + " ----");
-            printSeparator(terminal);
-            return;
-        }
-        else
-            terminal.writeLine("        ---- " +
-                    ChatColor.GREEN + "回答を入力" +
-                    (terminal.isPlayer() ? "するか、回答をクリック": "") + "してください。" + ChatColor.WHITE + " ----");
+        terminal.writeLine("       ---- " +
+                ChatColor.GREEN + "回答を入力" +
+                (terminal.isPlayer() ? "するか、回答をクリック": "") + "してください。" + ChatColor.WHITE + " ----");
 
         Map<String, String> choices = getChoices();
         if (choices != null)
@@ -233,7 +239,7 @@ public class Question
         @Override
         public boolean test(QuestionAttribute attribute)
         {
-            return Arrays.stream(validAttributes)
+            return Arrays.stream(this.validAttributes)
                     .anyMatch(validAttribute -> validAttribute.getName().equals(attribute.getName()));
         }
     }
