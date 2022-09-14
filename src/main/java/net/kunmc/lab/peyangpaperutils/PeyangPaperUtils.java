@@ -138,6 +138,6 @@ public final class PeyangPaperUtils extends JavaPlugin implements Listener
     @Override
     public void onDisable()
     {
-        // Plugin shutdown logic
+        this.inputManager.cancelAll();
     }
 }

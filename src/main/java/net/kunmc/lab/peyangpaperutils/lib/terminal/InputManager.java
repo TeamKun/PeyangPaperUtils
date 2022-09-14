@@ -157,4 +157,23 @@ public class InputManager implements Listener
             return;
         inputTasks.remove(question);
     }
+
+    /**
+     * すべての入力タスクをキャンセルします。
+     */
+    public void cancelAll()
+    {
+        for (UUID uuid : this.inputTasks.keySet())
+        {
+            try
+            {
+                cancelInputTask(uuid);
+            }
+            catch (Exception e)
+            {
+                System.out.println("An exception has occurred during closing an input task.");
+                e.printStackTrace();
+            }
+        }
+    }
 }
