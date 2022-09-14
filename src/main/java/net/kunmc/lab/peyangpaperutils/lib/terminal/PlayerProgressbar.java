@@ -110,7 +110,7 @@ class PlayerProgressbar implements Progressbar
             builder.append("[");
             for (int i = 0; i < this.size; i++)
             {
-                if (i > progress * 10)
+                if (i > this.progress * 10)
                     builder.append(ChatColor.RED).append("░");
                 else
                     builder.append(ChatColor.GREEN).append("█");
