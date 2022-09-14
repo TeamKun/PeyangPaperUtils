@@ -30,6 +30,7 @@ public final class PeyangPaperUtils extends JavaPlugin implements Listener
     @Getter
     private InputManager inputManager;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private CommandManager pluginCommandManager;
 
     private List<String> classes;
