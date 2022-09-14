@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Value;
+import net.kunmc.lab.peyangpaperutils.lib.utils.Utils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -14,6 +15,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -197,12 +201,31 @@ public class Question
         terminal.writeLine(ChatColor.BLUE + ChatColor.STRIKETHROUGH.toString() + line);
     }
 
+    private String getAnswerCommand(String answer)
+    {
+        String commandName = "/peyangutils answer";
+        String questionID = this.uuid.toString();
+        String answerEncoded;
+        try
+        {
+            answerEncoded = URLEncoder.encode(answer, StandardCharsets.UTF_8.name());
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new RuntimeException(e);  // Never happen
+        }
+
+        int validation = Utils.generateQuestionAnswerValidation(questionID, answerEncoded);
+
+        return String.format("%s %s %s %d", commandName, questionID, answerEncoded, validation);
+    }
+
     private void printChoices(Terminal terminal, Map<String, String> choices)
     {
         choices.forEach((value, text) -> terminal.write(
                 Component.text(ChatColor.YELLOW + value +
                                 " - " + ChatColor.GREEN + text)
-                        .clickEvent(ClickEvent.runCommand(value))
+                        .clickEvent(ClickEvent.runCommand(getAnswerCommand(value)))
                         .hoverEvent(HoverEvent.showText(
                                 Component.text(ChatColor.YELLOW + "クリックして送信： " + text)))
         ));

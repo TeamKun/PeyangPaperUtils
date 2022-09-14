@@ -5,6 +5,7 @@ import net.kunmc.lab.peyangpaperutils.lib.command.CommandManager;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.InputManager;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.PlayerTerminal;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminals;
+import net.kunmc.lab.peyangpaperutils.plugin.commands.AnswerCommand;
 import net.kunmc.lab.peyangpaperutils.plugin.commands.PeyangDebugCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.jar.JarFile;
 
@@ -35,9 +37,13 @@ public final class PeyangPaperUtils extends JavaPlugin implements Listener
 
     private List<String> classes;
 
+    @Getter
+    private final UUID runID;
+
     public PeyangPaperUtils()
     {
         instance = this;
+        this.runID = UUID.randomUUID();
     }
 
     @Override
@@ -46,6 +52,7 @@ public final class PeyangPaperUtils extends JavaPlugin implements Listener
         this.inputManager = new InputManager(this);
         this.pluginCommandManager = new CommandManager(this, "peyangutils", "PeyangUtilsDebug", "peyangutils");
         this.pluginCommandManager.registerCommand("debug", new PeyangDebugCommand());
+        this.pluginCommandManager.registerCommand("answer", new AnswerCommand());
 
         this.classes = new ArrayList<>();
 
@@ -89,7 +96,7 @@ public final class PeyangPaperUtils extends JavaPlugin implements Listener
         this.getLogger().info("Loading classes...");
 
         String urlString = "jar:file:" + this.getFile().getAbsolutePath() + "!/";
-        URL url = null;
+        URL url;
         try
         {
             url = new URL(urlString);

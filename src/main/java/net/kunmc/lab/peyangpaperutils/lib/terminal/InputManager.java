@@ -53,51 +53,82 @@ public class InputManager implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSay(AsyncChatEvent event)
     {
-        ArrayList<Question> inputTasks = this.inputTasks.get(event.getPlayer().getUniqueId());
-        String message = ((TextComponent) event.message().asComponent()).content();
-
-        if (inputTasks == null || inputTasks.isEmpty())
+        if (this.isInputTaskAvailable(event.getPlayer().getUniqueId()))
             return;
 
         event.setCancelled(true);
 
-        Question inputTask = inputTasks.get(0);
+        String message = ((TextComponent) event.message().asComponent()).content();
 
-        if (!inputTask.checkValidInput(message))
+        doAnswer(event.getPlayer().getUniqueId(), message);
+    }
+
+    /**
+     * 入力タスクが存在するかどうかを返します。
+     *
+     * @param id プレイヤーのUUID
+     * @return 入力タスクが存在するかどうか
+     */
+    public boolean isInputTaskAvailable(@Nullable UUID id)
+    {
+        ArrayList<Question> inputTasks = this.inputTasks.get(id);
+        return inputTasks != null && !inputTasks.isEmpty();
+    }
+
+    /**
+     * 入力タスクを返します。
+     *
+     * @param id 入力タスクのUUID
+     * @return 入力タスク
+     */
+    public @Nullable Question getQuestionByID(@NotNull UUID id)
+    {
+        return this.inputTasks.values().stream().parallel()
+                .flatMap(ArrayList::stream)
+                .filter(q -> q.getUuid().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * 入力タスクに答えます。
+     *
+     * @param question InputTask
+     * @param answer   答え
+     */
+    public void doAnswer(@NotNull Question question, @NotNull String answer)
+    {
+        if (!question.checkValidInput(answer))
         {
-            inputTask.getInput().getTerminal().error("入力が無効です：" + message);
+            question.getInput().getTerminal().error("入力が無効です：" + answer);
             return;
         }
 
-        inputTask.setAnswer(message);
+        question.setAnswer(answer);
+        ArrayList<Question> inputTasks = this.inputTasks.get(question.getTarget());
         inputTasks.remove(0);
         if (!inputTasks.isEmpty())
             inputTasks.get(0).printQuestion();
     }
 
+    private void doAnswer(@Nullable UUID uuid, @NotNull String answer)
+    {
+        ArrayList<Question> inputTasks = this.inputTasks.get(uuid);
+        if (inputTasks == null || inputTasks.isEmpty())
+            return;
+
+        doAnswer(inputTasks.get(0), answer);
+    }
+
     @EventHandler
     public void onConsoleSay(ServerCommandEvent e)
     {
-        ArrayList<Question> inputTasks = this.inputTasks.get(null);
-
-        if (inputTasks == null || inputTasks.isEmpty())
+        if (this.isInputTaskAvailable(null))
             return;
 
         e.setCancelled(true);
 
-        Question inputTask = inputTasks.get(0);
-        String message = e.getCommand();
-
-        if (!inputTask.checkValidInput(message))
-        {
-            inputTask.getInput().getTerminal().error("入力が無効です：" + message);
-            return;
-        }
-
-        inputTask.setAnswer(message);
-        inputTasks.remove(0);
-        if (!inputTasks.isEmpty())
-            inputTasks.get(0).printQuestion();
+        doAnswer((UUID) null, e.getCommand());
     }
 
     /**
