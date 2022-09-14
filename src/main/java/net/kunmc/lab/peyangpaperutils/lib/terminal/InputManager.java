@@ -53,7 +53,7 @@ public class InputManager implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSay(AsyncChatEvent event)
     {
-        if (this.isInputTaskAvailable(event.getPlayer().getUniqueId()))
+        if (!this.isInputTaskAvailable(event.getPlayer().getUniqueId()))
             return;
 
         event.setCancelled(true);
@@ -123,7 +123,7 @@ public class InputManager implements Listener
     @EventHandler
     public void onConsoleSay(ServerCommandEvent e)
     {
-        if (this.isInputTaskAvailable(null))
+        if (!this.isInputTaskAvailable(null))
             return;
 
         e.setCancelled(true);
