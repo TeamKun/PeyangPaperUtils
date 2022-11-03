@@ -1,13 +1,13 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +26,7 @@ public class InputManager implements Listener
 {
     private final Map<UUID, ArrayList<Question>> inputTasks;
 
-    public InputManager(PeyangPaperUtils plugin)
+    public InputManager(Plugin plugin)
     {
         this.inputTasks = new HashMap<>();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
