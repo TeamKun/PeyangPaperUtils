@@ -340,15 +340,5 @@ public class ConfigManager<T>
         {
             return this.define.min() != -1 || this.define.max() != -1;
         }
-
-        public boolean isMin()
-        {
-            return this.define.min() != -1;
-        }
-
-        public boolean isMax()
-        {
-            return this.define.max() != -1;
-        }
     }
 }
