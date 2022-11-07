@@ -40,7 +40,7 @@ public final class PeyangPaperUtils implements Listener
     {
         if (instance != null)
         {
-            if (PeyangPaperUtils.class.getPackage().getName().equals("net.kunmc.lab" + "peyangpaperutils"))
+            if (PeyangPaperUtils.class.getPackage().getName().equals("net.kunmc.lab".concat(".peyangpaperutils")))
                 throw new IllegalStateException("PeyangPaperUtils is used without package relocation.");
             throw new IllegalStateException("PeyangPaperUtils is already initialized.");
         }
