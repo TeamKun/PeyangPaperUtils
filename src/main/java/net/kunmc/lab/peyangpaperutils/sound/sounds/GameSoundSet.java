@@ -13,7 +13,13 @@ import org.bukkit.SoundCategory;
 @AllArgsConstructor
 public enum GameSoundSet implements SoundSet
 {
+    /**
+     * ゲームが開始したときに再生するべき音です。
+     */
     START(Sound.ENTITY_ENDER_DRAGON_AMBIENT, SoundCategory.AMBIENT, 0.5f, 1.0f),
+    /**
+     * ゲームが終了したときに再生するべき音です。
+     */
     END(Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.AMBIENT, 0.5f, 2.0f),
 
     ;
