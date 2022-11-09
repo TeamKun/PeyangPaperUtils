@@ -268,6 +268,40 @@ class ConfigClass
   ConfigManager<ConfigClass> manager = new ConfigManager<>(Paths.get("config.json"), ConfigClass.class);
 ```
 
+### サウンドセット&サウンドユーティリティ
+
+たぶんつかうであろうサウンドを予め定義したEnumたち!!!   
+サウンドを定義するEnum用の便利なインタフェース!!!
+
+```java
+  Player player;
+  
+  // クエスト開始時とか?
+  QuestSoundSet.QUEST_START.play(player);
+  
+  // プレイヤリスポーン時とか?
+  PlayerSoundSet.RESPAWN.play(player);
+  
+  @Getter
+  enum MySoundSet implements SoundSet
+  {
+      MY_SOUND_1(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f),
+      MY_SOUND_2(Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f),
+    
+      ;
+      
+      private final Sound sound;
+      private final SoundCategory source;
+      private final float volume;
+      private final float pitch;
+  }
+  
+  MySoundSet.MY_SOUND_1.play(player, PlayArea.NEARBY_10);  // 付近10m以内のプレイヤのみに再生
+  MySoundSet.MY_SOUND_2.play(player, 1.0f, 0.5f);  // ボリューム1.0, ピッチ0.5で再生
+  // その他, サウンドの再生位置を指定したり, サウンドカテゴリを指定したり, サウンドの再生範囲を指定したりできるやついっぱい。
+  // 多分全部網羅してるはず(してなかったらIssue or PR or なんかで教えてください)
+```
+
 ### DBのトランザクションシステム
 
 ```java
