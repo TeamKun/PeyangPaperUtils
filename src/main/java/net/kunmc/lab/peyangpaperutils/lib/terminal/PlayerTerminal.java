@@ -38,16 +38,29 @@ public class PlayerTerminal extends AbstractBukkitTerminal
         return true;
     }
 
-    @Override
-    public @NotNull Progressbar createProgressbar(@NotNull String name) throws IllegalStateException
+    /**
+     * プログレスバーを作成します。
+     *
+     * @param name プログレスバーの名前
+     * @param type プログレスバーのタイプ
+     * @return 作成したプログレスバー
+     * @throws IllegalStateException 既に同じ名前のプログレスバーが存在する場合
+     */
+    public @NotNull Progressbar createProgressbar(@NotNull String name, @NotNull PlayerProgressbar.ProgressbarType type) throws IllegalStateException
     {
         if (this.progressbars.containsKey(name))
             throw new IllegalStateException("Progressbar with name " + name + " already exists!");
 
-        Progressbar progressbar = new PlayerProgressbar(this.player, PlayerProgressbar.ProgressbarType.BOSS_BAR);
+        Progressbar progressbar = new PlayerProgressbar(this.player, type);
         this.progressbars.put(name, progressbar);
 
         return progressbar;
+    }
+
+    @Override
+    public @NotNull Progressbar createProgressbar(@NotNull String name) throws IllegalStateException
+    {
+        return this.createProgressbar(name, PlayerProgressbar.ProgressbarType.BOSS_BAR);
     }
 
     @Override
