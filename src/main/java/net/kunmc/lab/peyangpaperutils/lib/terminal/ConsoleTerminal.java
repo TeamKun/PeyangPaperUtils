@@ -8,13 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 class ConsoleTerminal extends AbstractBukkitTerminal
 {
-    private static final DummyProgressbar DUMMY_PROGRESSBAR;
-
-    static
-    {
-        DUMMY_PROGRESSBAR = new DummyProgressbar();
-    }
-
     ConsoleTerminal()
     {
         super(Bukkit.getConsoleSender());
@@ -32,7 +25,7 @@ class ConsoleTerminal extends AbstractBukkitTerminal
     @Override
     public @NotNull Progressbar createProgressbar(@NotNull String name) throws IllegalStateException
     {
-        return DUMMY_PROGRESSBAR;
+        throw new UnsupportedOperationException("Console does not support progressbar.");
     }
 
     /**
@@ -41,13 +34,13 @@ class ConsoleTerminal extends AbstractBukkitTerminal
     @Override
     public boolean removeProgressbar(@NotNull String name)
     {
-        return true;
+        throw new UnsupportedOperationException("Console does not support progressbar.");
     }
 
     @Override
     public @Nullable Progressbar getProgressbar(@NotNull String name)
     {
-        return DUMMY_PROGRESSBAR;
+        throw new UnsupportedOperationException("Console does not support progressbar.");
     }
 
     @Override
@@ -70,57 +63,5 @@ class ConsoleTerminal extends AbstractBukkitTerminal
     @Override
     public void clearNotification()
     {
-    }
-
-    private static class DummyProgressbar implements Progressbar
-    {
-
-        @Override
-        public void setProgressMax(int max)
-        {
-
-        }
-
-        @Override
-        public void setProgress(int progress)
-        {
-
-        }
-
-        @Override
-        public void setPrefix(@Nullable String prefix)
-        {
-
-        }
-
-        @Override
-        public void setSuffix(@Nullable String suffix)
-        {
-
-        }
-
-        @Override
-        public void setSize(int size)
-        {
-
-        }
-
-        @Override
-        public void show()
-        {
-
-        }
-
-        @Override
-        public void hide()
-        {
-
-        }
-
-        @Override
-        public void update()
-        {
-
-        }
     }
 }
