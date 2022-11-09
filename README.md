@@ -193,7 +193,7 @@ BukkitRunnableの匿名クラスでタスク作るのが面倒くさい人向け
     <summary>コマンドクラス</summary>
 
 ```java
-  public class CommandDoStuff extends CommandBase
+public class CommandDoStuff extends CommandBase
 {
 
   @Override
@@ -206,7 +206,7 @@ BukkitRunnableの匿名クラスでタスク作るのが面倒くさい人向け
 
     String stuffName = args[0];
     Integer repeatCount;
-    if (args.length >= 2 && this.parseInteger(terminal, args[1], 1, 100) != null)
+    if (args.length >= 2 && (repeatCount = this.parseInteger(terminal, args[1], 1, 100)) == null)
       // 引数が2つ以上で, 2番目の引数が1~100の整数でない場合はエラーを表示して終了
       return;
     else
