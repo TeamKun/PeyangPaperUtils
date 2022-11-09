@@ -159,86 +159,94 @@ BukkitRunnableの匿名クラスでタスク作るのが面倒くさい人向け
   <details>
     <summary>plugin.yml</summary>
 
-    ```yml
-      name: ExamplePlugin
-      
-      commands:
-        examplecommand:
-          aliases:
-            - ex
-      permission:
-        examplepermission:
-          default: op
-    ```
+```yml
+  name: ExamplePlugin
+  
+  commands:
+    examplecommand:
+      aliases:
+        - ex
+  permission:
+    examplepermission:
+      default: op
+```
 
   </details>
 
   <details>
     <summary>CommandManagerを管理するクラス(onEnableがあるとこ推奨)</summary>
 
-    ```java 
-      CommandManager manager;
-  
-      // onEnable 内
-  
-      this.manager = new CommandManager(this, "examplecommand", "ExamplePlugin", "examplepermission");
-      
-      this.manager.registerCommand("dostuff", new CommandDoStuff(), "ds", "do_stuff", "stuff");
+```java 
+  CommandManager manager;
 
-    ```
+  // onEnable 内
+
+  this.manager = new CommandManager(this, "examplecommand", "ExamplePlugin", "examplepermission");
+  
+  this.manager.registerCommand("dostuff", new CommandDoStuff(), "ds", "do_stuff", "stuff");
+
+```
 
   </details>
 
   <details>
     <summary>コマンドクラス</summary>
 
-    ```java
-      public class CommandDoStuff extends CommandBase {
-  
-        @Override
-        public void onCommand(@NotNull CommandSender sender, @NotNull Terminal terminal, String[] args) {
-  
-          if (this.indicateArgsLengthInvalid(terminal, args, 1, 2)  // 引数の長さが1~2でない場合はエラーを表示して終了
-              || this.indicatePlayer(terminal)  // コンソールから実行された場合はエラーを表示して終了
-            return;
-  
-         String stuffName = args[0];
-         Integer repeatCount;
-         if (args.length >= 2 && this.parseInteger(terminal, args[1], 1, 100) != null)  
-             // 引数が2つ以上で, 2番目の引数が1~100の整数でない場合はエラーを表示して終了
-           return;
-         else
-           repeatCount = 1;
-  
-        for (int i = 0; i < repeatCount; i++)
-          terminal.info("Do stuff: " + stuffName);
-  
-        }
-    
-        @Override
-        public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Terminal terminal, String[] args) {
-            return List.of("stuff1", "stuff2");
-        }
-    
-        @Override
-        public @Nullable String getPermission() {
-            return "exampleplugin.dostuff";
-        }
-    
-        @Override
-        public TextComponent getHelpOneLine() {
-            return of("Do stuff!");
-        }
-    
-        @Override
-        public String[] getArguments() {
-            return new String[] {
-              this.required("stuff"),  // 必須引数
-              this.optional("repeat")  // 任意引数
-            };
-        }
-      }
-    ```
+```java
+  public class CommandDoStuff extends CommandBase
+{
+
+  @Override
+  public void onCommand(@NotNull CommandSender sender, @NotNull Terminal terminal, String[] args)
+  {
+
+    if (this.indicateArgsLengthInvalid(terminal, args, 1, 2)  // 引数の長さが1~2でない場合はエラーを表示して終了
+            || this.indicatePlayer(terminal)  // コンソールから実行された場合はエラーを表示して終了
+    return;
+
+    String stuffName = args[0];
+    Integer repeatCount;
+    if (args.length >= 2 && this.parseInteger(terminal, args[1], 1, 100) != null)
+      // 引数が2つ以上で, 2番目の引数が1~100の整数でない場合はエラーを表示して終了
+      return;
+    else
+      repeatCount = 1;
+
+    for (int i = 0; i < repeatCount; i++)
+      terminal.info("Do stuff: " + stuffName);
+
+  }
+
+  @Override
+  @Nullable
+  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Terminal terminal, String[] args)
+  {
+    return List.of("stuff1", "stuff2");
+  }
+
+  @Override
+  @Nullable
+  public String getPermission()
+  {
+    return "exampleplugin.dostuff";
+  }
+
+  @Override
+  public TextComponent getHelpOneLine()
+  {
+    return of("Do stuff!");
+  }
+
+  @Override
+  public String[] getArguments()
+  {
+    return new String[]{
+            this.required("stuff"),  // 必須引数
+            this.optional("repeat")  // 任意引数
+    };
+  }
+}
+```
 
   </details>
 
