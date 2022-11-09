@@ -53,7 +53,12 @@ public class PlayerTerminal extends AbstractBukkitTerminal
     @Override
     public boolean removeProgressbar(@NotNull String name)
     {
-        return this.progressbars.remove(name) != null;
+        Progressbar progressbar = this.progressbars.remove(name);
+        if (progressbar == null)
+            return false;
+
+        progressbar.hide();
+        return true;
     }
 
     @Override
