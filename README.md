@@ -70,3 +70,71 @@
           task.cancel();
       }, 20L);
       ```
++ DBのトランザクションシステム
+
+```java
+Connection connection;
+class Employee {
+    int id;
+    String name;
+    int age;
+    String type;
+}
+
+QueryResult<Employee> result = Transaction.create(connection, "SELECT * FROM example_table WHERE id = ? AND type = ?")
+    .set(1, 123456)
+    .set(2, "EMPLOYEE")
+    .executeQuery();
+```
+
++ DB操作時の自動コミット(すべての実行の最後にコミット)
+  ```java
+  Transaction.create(connection)
+      .doTransaction((Transaction) -> {
+          Connection connection = transaction.getConnection();
+          // ここでDB操作
+      });
+  ```
++ DB操作時のtry-catchを省略できるように！(非チェック例外にします)
+  => SQLExceptionが発生した場合は自動的にロールバック！！
++ close忘れがなくなる
++ 結果をStream処理できる
+  ```java
+  result.stream().map((ResultRow row) -> {
+      Employee employee = new Employee();
+      employee.id = row.getInt("id");
+      employee.name = row.getString("name");
+      employee.age = row.getInt("age");
+      employee.type = row.getString("type");
+      return employee;
+  }).forEach((Employee employee) -> {
+      System.out.println(employee.name);
+  });
+  ```
++ 結果をオブジェクトに変換して取得(マッパーを予め定義)
+  ```java
+  result.mapper((ResultRow row) -> {
+      Employee employee = new Employee();
+      employee.id = row.getInt("id");
+      employee.name = row.getString("name");
+      employee.age = row.getInt("age");
+      employee.type = row.getString("type");
+      return employee;
+  });
+  
+  while (result.next()) {
+      Employee employee = result.get();
+      System.out.println(employee.name);
+  }
+  ```
++ 結果をListで取得(マッパーを引数に突っ込む)
+  ```java
+  ArrayList<Employee> employees = result.mapToList((ResultSet resultSet) -> {
+      Employee employee = new Employee();
+      employee.id = resultSet.getInt("id");
+      employee.name = resultSet.getString("name");
+      employee.age = resultSet.getInt("age");
+      employee.type = resultSet.getString("type");
+      return employee;
+  });
+  ```
