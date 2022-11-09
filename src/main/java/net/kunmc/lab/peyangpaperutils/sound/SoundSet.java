@@ -90,6 +90,17 @@ public interface SoundSet
     /**
      * 音を再生します。
      *
+     * @param player   再生するプレイヤー
+     * @param playArea 再生する範囲
+     */
+    default void play(@NotNull Player player, @NotNull PlayArea playArea)
+    {
+        this.play(player, playArea, this.getVolume(), this.getPitch());
+    }
+
+    /**
+     * 音を再生します。
+     *
      * @param player 再生するプレイヤー
      */
     default void play(@NotNull Player player)
