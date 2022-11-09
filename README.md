@@ -324,7 +324,7 @@ class ConfigClass
   QueryResult<Employee> result = Transaction.create(connection, "SELECT * FROM example_table WHERE id = ? AND type = ?")
       .set(1, 123456)
       .set(2, "EMPLOYEE")
-      .executeQuery();
+      .executeUpdate();
 ```
 
 + DB操作時の自動コミット(すべての実行の最後にコミット)
