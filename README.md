@@ -244,7 +244,31 @@ BukkitRunnableの匿名クラスでタスク作るのが面倒くさい人向け
 
 </details>
 
-+ DBのトランザクションシステム
+### コンフィグシステム
+
+ファイルベースのコンフィグを簡単に作れる。
+
+```java
+
+@Getter
+class ConfigClass
+{
+  @Config("Example Value 1")
+  private final String exampleValue1 = "example1";
+  @Config("Example Value 2", min = 1, max = 10)
+  private final int exampleValue2 = 5;
+  @Config("Example Ranged Value", min = 1, max = 10, ranged = true)
+  private final int minExample = 1;
+  @Config("Example Ranged Value", min = 1, max = 10, ranged = true)
+  private final int maxExample = 10;
+  @Config("Example string enum", enums = {"example1", "example2"})
+  private final String exampleStringEnum = "example1";
+}
+
+  ConfigManager<ConfigClass> manager = new ConfigManager<>(Paths.get("config.json"), ConfigClass.class);
+```
+
+### DBのトランザクションシステム
 
 ```java
   Connection connection;
