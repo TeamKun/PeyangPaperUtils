@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Value;
+import net.kunmc.lab.peyangpaperutils.lib.command.CommandManager;
 import net.kunmc.lab.peyangpaperutils.lib.utils.Utils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -203,7 +204,10 @@ public class Question
 
     private String getAnswerCommand(String answer)
     {
-        String commandName = "/peyangutils answer";
+        if (CommandManager.getFirstInstance() == null)
+            return "/tellraw @p {\"text\":\"質問に回答するには " + answer + " と入力してください。\", \"color\":\"gray\"}";
+
+        String commandName = "/" + CommandManager.getFirstInstance().getRootCommandName() + " ansPYGQuestion";
         String questionID = this.uuid.toString();
         String answerEncoded;
         try

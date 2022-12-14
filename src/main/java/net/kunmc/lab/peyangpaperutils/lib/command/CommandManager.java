@@ -1,5 +1,6 @@
 package net.kunmc.lab.peyangpaperutils.lib.command;
 
+import lombok.Getter;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminals;
 import net.kunmc.lab.peyangpaperutils.lib.utils.Utils;
@@ -25,10 +26,13 @@ import java.util.Map;
 public class CommandManager implements CommandExecutor, TabCompleter
 {
     public static final String ALIAS_PREFIX = "\0alias\0";
+    @Getter
+    private static CommandManager firstInstance;
 
     private final HashMap<String, CommandBase> commands;
     private final String permission;
     private final CommandBase helpCommand;
+    @Getter
     private final String rootCommandName;
 
     /**
@@ -51,6 +55,9 @@ public class CommandManager implements CommandExecutor, TabCompleter
         plugin.getCommand(commandName).setTabCompleter(this);
 
         registerCommand("help", this.helpCommand);
+
+        if (firstInstance == null)
+            firstInstance = this;
     }
 
     public static List<String> handleTabComplete(@NotNull CommandSender sender, @NotNull String[] args,
@@ -115,6 +122,12 @@ public class CommandManager implements CommandExecutor, TabCompleter
         if (CommandBase.indicateArgsLengthInvalid(terminal, args, 1))
         {
             this.helpCommand.onCommand(sender, terminal, new String[0]);
+            return true;
+        }
+
+        if (firstInstance == this && args[0].equalsIgnoreCase("ansPYGQuestion"))
+        {
+            new CommandAnswer().onCommand(sender, terminal, Utils.removeFirstElement(args));
             return true;
         }
 
