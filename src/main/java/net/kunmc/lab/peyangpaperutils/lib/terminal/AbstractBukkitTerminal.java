@@ -7,7 +7,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,39 +50,39 @@ abstract class AbstractBukkitTerminal implements Terminal
         return String.format(format, args);
     }
 
-    private static BaseComponent[] colorWith(String message, ChatColor color)
+    private static BaseComponent[] buildText(String prefix, String message, ChatColor color)
     {
-        return new ComponentBuilder(message).color(color).create();
+        return TextComponent.fromLegacyText(prefix + ": " + color + message);
     }
 
     @Override
     public void info(@NotNull String message, Object... args)
     {
-        this.write(TextComponent.fromLegacyText(safeFormat("I:" + message, args), INFO_COLOR));
+        this.write(buildText("I", safeFormat(message, args), INFO_COLOR));
     }
 
     @Override
     public void error(@NotNull String message, Object... args)
     {
-        this.write(TextComponent.fromLegacyText(safeFormat("E:" + message, args), ERR_COLOR));
+        this.write(buildText("E", safeFormat(message, args), ERR_COLOR));
     }
 
     @Override
     public void success(@NotNull String message, Object... args)
     {
-        this.write(TextComponent.fromLegacyText(safeFormat("S:" + message, args), INFO_COLOR));
+        this.write(buildText("S", safeFormat(message, args), INFO_COLOR));
     }
 
     @Override
     public void warn(@NotNull String message, Object... args)
     {
-        this.write(TextComponent.fromLegacyText(safeFormat("W:" + message, args), WARN_COLOR));
+        this.write(buildText("W", safeFormat(message, args), WARN_COLOR));
     }
 
     @Override
     public void hint(@NotNull String message, Object... args)
     {
-        this.write(TextComponent.fromLegacyText(safeFormat("H:" + message, args), HINT_COLOR));
+        this.write(buildText("H", safeFormat(message, args), HINT_COLOR));
     }
 
     @Override
