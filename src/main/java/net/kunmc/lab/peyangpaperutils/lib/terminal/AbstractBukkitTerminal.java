@@ -15,6 +15,7 @@ abstract class AbstractBukkitTerminal implements Terminal
     private static final ChatColor INFO_COLOR = ChatColor.of("#36C0E3");
     private static final ChatColor WARN_COLOR = ChatColor.of("#E3BB36");
     private static final ChatColor ERR_COLOR = ChatColor.of("#E34736");
+    private static final ChatColor SCSS_COLOR = ChatColor.of("#4CB52B");
     private static final ChatColor HINT_COLOR = ChatColor.of("#CCD4DB");
 
     @Getter
@@ -70,7 +71,7 @@ abstract class AbstractBukkitTerminal implements Terminal
     @Override
     public void success(@NotNull String message, Object... args)
     {
-        this.write(buildText("S", safeFormat(message, args), INFO_COLOR));
+        this.write(buildText("S", safeFormat(message, args), SCSS_COLOR));
     }
 
     @Override
