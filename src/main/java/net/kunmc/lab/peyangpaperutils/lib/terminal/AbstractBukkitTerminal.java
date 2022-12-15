@@ -81,6 +81,12 @@ abstract class AbstractBukkitTerminal implements Terminal
     }
 
     @Override
+    public void hint(@NotNull String message, Object... args)
+    {
+        this.write(TextComponent.fromLegacyText(safeFormat("H:" + message, args), HINT_COLOR));
+    }
+
+    @Override
     public void writeLine(@NotNull String message)
     {
         write(Component.text(message));

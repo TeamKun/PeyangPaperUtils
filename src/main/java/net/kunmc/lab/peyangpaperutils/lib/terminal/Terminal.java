@@ -60,6 +60,15 @@ public interface Terminal
     void warn(@NotNull String message, Object... args);
 
     /**
+     * ヒントメッセージを出力します。
+     *
+     * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
+     */
+    void hint(@NotNull String message, Object... args);
+
+    /**
      * メッセージを改行して出力します。
      *
      * @param message 出力するメッセージ
@@ -202,6 +211,12 @@ public interface Terminal
 
             @Override
             public void warn(@NotNull String message, Object... args)
+            {
+
+            }
+
+            @Override
+            public void hint(@NotNull String message, Object... args)
             {
 
             }
