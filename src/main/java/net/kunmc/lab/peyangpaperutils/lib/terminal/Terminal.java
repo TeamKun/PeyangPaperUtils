@@ -2,6 +2,7 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,7 +74,15 @@ public interface Terminal
     void write(@NotNull Component component);
 
     /**
+     * Bungee API のコンポーネントを出力します。
+     *
+     * @param component 出力するコンポーネント
+     */
+    void write(@NotNull BaseComponent[] component);
+
+    /**
      * プレイヤかどうかを返します。
+     *
      * @return プレイヤかどうか
      */
     boolean isPlayer();
@@ -205,6 +214,12 @@ public interface Terminal
 
             @Override
             public void write(@NotNull Component component)
+            {
+
+            }
+
+            @Override
+            public void write(@NotNull BaseComponent[] component)
             {
 
             }

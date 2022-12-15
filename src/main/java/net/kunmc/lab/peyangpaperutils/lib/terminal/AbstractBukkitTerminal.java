@@ -5,11 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.jetbrains.annotations.NotNull;
 
 abstract class AbstractBukkitTerminal implements Terminal
 {
+    private static final ChatColor INFO_COLOR = ChatColor.of("#36C0E3");
+    private static final ChatColor WARN_COLOR = ChatColor.of("#E3BB36");
+    private static final ChatColor ERR_COLOR = ChatColor.of("#E34736");
+    private static final ChatColor HINT_COLOR = ChatColor.of("#CCD4DB");
+
     @Getter
     @Setter(AccessLevel.PROTECTED)
     private Audience audience;
@@ -43,28 +51,33 @@ abstract class AbstractBukkitTerminal implements Terminal
         return String.format(format, args);
     }
 
+    private static BaseComponent[] colorWith(String message, ChatColor color)
+    {
+        return new ComponentBuilder(message).color(color).create();
+    }
+
     @Override
     public void info(@NotNull String message, Object... args)
     {
-        writeLine(safeFormat(ChatColor.BLUE + "I: " + message, args));
+        this.write(TextComponent.fromLegacyText(safeFormat("I:" + message, args), INFO_COLOR));
     }
 
     @Override
     public void error(@NotNull String message, Object... args)
     {
-        writeLine(safeFormat(ChatColor.RED + "E: " + message, args));
+        this.write(TextComponent.fromLegacyText(safeFormat("E:" + message, args), ERR_COLOR));
     }
 
     @Override
     public void success(@NotNull String message, Object... args)
     {
-        writeLine(safeFormat(ChatColor.GREEN + "S: " + message, args));
+        this.write(TextComponent.fromLegacyText(safeFormat("S:" + message, args), INFO_COLOR));
     }
 
     @Override
     public void warn(@NotNull String message, Object... args)
     {
-        writeLine(safeFormat(ChatColor.YELLOW + "W: " + message, args));
+        this.write(TextComponent.fromLegacyText(safeFormat("W:" + message, args), WARN_COLOR));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,6 +12,13 @@ class ConsoleTerminal extends AbstractBukkitTerminal
     ConsoleTerminal()
     {
         super(Bukkit.getConsoleSender());
+    }
+
+    @Override
+    public void write(@NotNull BaseComponent[] component)
+    {
+        // noinspection deprecation
+        Bukkit.getConsoleSender().spigot().sendMessage(component);
     }
 
     @Override

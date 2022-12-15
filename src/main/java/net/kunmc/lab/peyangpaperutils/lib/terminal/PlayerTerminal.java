@@ -2,6 +2,7 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,13 @@ public class PlayerTerminal extends AbstractBukkitTerminal
     public @NotNull Audience getAudience()
     {
         return this.player;
+    }
+
+    @Override
+    public void write(@NotNull BaseComponent[] component)
+    {
+        // noinspection deprecation
+        this.player.spigot().sendMessage(component);
     }
 
     @Override
