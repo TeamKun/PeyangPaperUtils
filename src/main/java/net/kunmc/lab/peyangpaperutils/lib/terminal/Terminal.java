@@ -69,6 +69,51 @@ public interface Terminal
     void hint(@NotNull String message, Object... args);
 
     /**
+     * 情報メッセージを接頭辞なしで出力します。
+     *
+     * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
+     */
+    void infoImplicit(@NotNull String message, Object... args);
+
+    /**
+     * エラーメッセージを接頭辞なしで出力します。
+     *
+     * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
+     */
+    void errorImplicit(@NotNull String message, Object... args);
+
+    /**
+     * 成功メッセージを接頭辞なしで出力します。
+     *
+     * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
+     */
+    void successImplicit(@NotNull String message, Object... args);
+
+    /**
+     * 警告メッセージを接頭辞なしで出力します。
+     *
+     * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
+     */
+    void warnImplicit(@NotNull String message, Object... args);
+
+    /**
+     * ヒントメッセージを接頭辞なしで出力します。
+     *
+     * @param message 出力するメッセージ
+     * @param args    引数
+     * @see String#format(String, Object...)
+     */
+    void hintImplicit(@NotNull String message, Object... args);
+
+    /**
      * メッセージを改行して出力します。
      *
      * @param message 出力するメッセージ
@@ -217,6 +262,36 @@ public interface Terminal
 
             @Override
             public void hint(@NotNull String message, Object... args)
+            {
+
+            }
+
+            @Override
+            public void infoImplicit(@NotNull String message, Object... args)
+            {
+
+            }
+
+            @Override
+            public void errorImplicit(@NotNull String message, Object... args)
+            {
+
+            }
+
+            @Override
+            public void successImplicit(@NotNull String message, Object... args)
+            {
+
+            }
+
+            @Override
+            public void warnImplicit(@NotNull String message, Object... args)
+            {
+
+            }
+
+            @Override
+            public void hintImplicit(@NotNull String message, Object... args)
             {
 
             }

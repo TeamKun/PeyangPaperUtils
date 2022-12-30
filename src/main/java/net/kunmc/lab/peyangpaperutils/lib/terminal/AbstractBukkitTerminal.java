@@ -53,7 +53,15 @@ abstract class AbstractBukkitTerminal implements Terminal
 
     private static BaseComponent[] buildText(String prefix, String message, ChatColor color)
     {
-        return TextComponent.fromLegacyText(color + prefix + ": " + message, color);
+        if (prefix == null)
+            return TextComponent.fromLegacyText(color + ": " + message, color);
+        else
+            return TextComponent.fromLegacyText(color + prefix + ": " + message, color);
+    }
+
+    private static BaseComponent[] buildText(String message, ChatColor color)
+    {
+        return buildText(null, message, color);
     }
 
     @Override
@@ -84,6 +92,36 @@ abstract class AbstractBukkitTerminal implements Terminal
     public void hint(@NotNull String message, Object... args)
     {
         this.write(buildText("H", safeFormat(message, args), HINT_COLOR));
+    }
+
+    @Override
+    public void infoImplicit(@NotNull String message, Object... args)
+    {
+        this.write(buildText(safeFormat(message, args), INFO_COLOR));
+    }
+
+    @Override
+    public void errorImplicit(@NotNull String message, Object... args)
+    {
+        this.write(buildText(safeFormat(message, args), ERR_COLOR));
+    }
+
+    @Override
+    public void successImplicit(@NotNull String message, Object... args)
+    {
+        this.write(buildText(safeFormat(message, args), SCSS_COLOR));
+    }
+
+    @Override
+    public void warnImplicit(@NotNull String message, Object... args)
+    {
+        this.write(buildText(safeFormat(message, args), WARN_COLOR));
+    }
+
+    @Override
+    public void hintImplicit(@NotNull String message, Object... args)
+    {
+        this.write(buildText(safeFormat(message, args), HINT_COLOR));
     }
 
     @Override
