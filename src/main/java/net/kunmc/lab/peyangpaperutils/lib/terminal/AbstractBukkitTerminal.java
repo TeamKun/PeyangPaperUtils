@@ -53,7 +53,7 @@ abstract class AbstractBukkitTerminal implements Terminal
 
     private static BaseComponent[] buildText(String prefix, String message, ChatColor color)
     {
-        return TextComponent.fromLegacyText(color + prefix + ": " + message);
+        return TextComponent.fromLegacyText(color + prefix + ": " + message, color);
     }
 
     @Override
