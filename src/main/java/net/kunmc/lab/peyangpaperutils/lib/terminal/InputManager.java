@@ -2,6 +2,7 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.TextComponent;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -123,6 +124,9 @@ public class InputManager implements Listener
     @EventHandler
     public void onConsoleSay(ServerCommandEvent e)
     {
+        if (!(e.getSender() instanceof ConsoleCommandSender))
+            return;
+
         if (!this.isInputTaskAvailable(null))
             return;
 
