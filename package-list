@@ -5,5 +5,7 @@ net.kunmc.lab.peyangpaperutils.lib.command
 net.kunmc.lab.peyangpaperutils.lib.terminal
 net.kunmc.lab.peyangpaperutils.lib.terminal.attributes
 net.kunmc.lab.peyangpaperutils.lib.utils
+net.kunmc.lab.peyangpaperutils.signal
 net.kunmc.lab.peyangpaperutils.sound
 net.kunmc.lab.peyangpaperutils.sound.sounds
+net.kunmc.lab.peyangpaperutils.versioning
