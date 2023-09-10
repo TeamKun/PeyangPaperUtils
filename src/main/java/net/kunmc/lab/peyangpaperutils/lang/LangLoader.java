@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -138,18 +139,19 @@ import java.util.zip.ZipInputStream;
     private Properties loadLanguageFromJar(String name) throws IOException
     {
         File pluginFile = getPluginFile(this.plugin);
-        String languagePath = this.langFilesPath.resolve(name).toString();
+        Path targetLangFilePath = this.langFilesPath.resolve(name + EXT_LANG);
 
         try (ZipInputStream zipInputStream = new ZipInputStream(pluginFile.toURI().toURL().openStream()))
         {
             ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null)
             {
-                if (entry.isDirectory())
+                String entryName = entry.getName();
+                if (entry.isDirectory() || !entryName.endsWith(EXT_LANG))
                     continue;
 
-                String entryName = entry.getName();
-                if (!(entryName.startsWith(languagePath) && entryName.endsWith(EXT_LANG)))
+                Path entryPath = Paths.get(entryName);
+                if (!entryPath.equals(targetLangFilePath))
                     continue;
 
                 break;
@@ -212,7 +214,7 @@ import java.util.zip.ZipInputStream;
                     continue;
                 }
 
-                result.add(langName.substring(0, langName.length() - EXT_LANG.length()));
+                result.add(langName.substring(0, langName.length() - EXT_LANG.length()));  // 拡張子削除
             }
 
         }
