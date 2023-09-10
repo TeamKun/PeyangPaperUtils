@@ -23,39 +23,7 @@ import java.util.zip.ZipInputStream;
 
 /* non-public */ class LangLoader
 {
-    private List<String> findDataFolderLanguages(File languagesFolder, Logger logger)
-    {
-        List<String> result = new ArrayList<>();
-
-        if (!languagesFolder.exists())
-            return result;
-
-        File[] files = languagesFolder.listFiles();
-        if (files == null)
-            return result;
-
-        for (File file : files)
-        {
-            if (file.isDirectory())
-                continue;
-
-            String fileName = file.getName();
-            if (!fileName.endsWith(EXT_LANG))
-            {
-                logger.warning("Invalid language file name: " + fileName);
-                continue;
-            }
-
-            result.add(fileName.substring(0, fileName.length() - EXT_LANG.length()));
-        }
-
-        if (result.isEmpty())
-            logger.warning("No language files found in the data folder.");
-        else
-            logger.info("Found " + result.size() + " language files in the data folder.");
-
-        return result;
-    }    private static final String EXT_LANG = EXT_LANG;
+    private static final String EXT_LANG = ".lang";
     
     private static final Method pluginGetFile;
 
@@ -121,6 +89,52 @@ import java.util.zip.ZipInputStream;
         }
     }
 
+    private List<String> findDataFolderLanguages(File languagesFolder, Logger logger)
+    {
+        List<String> result = new ArrayList<>();
+
+        if (!languagesFolder.exists())
+            return result;
+
+        File[] files = languagesFolder.listFiles();
+        if (files == null)
+            return result;
+
+        for (File file : files)
+        {
+            if (file.isDirectory())
+                continue;
+
+            String fileName = file.getName();
+            if (!fileName.endsWith(EXT_LANG))
+            {
+                logger.warning("Invalid language file name: " + fileName);
+                continue;
+            }
+
+            result.add(fileName.substring(0, fileName.length() - EXT_LANG.length()));
+        }
+
+        if (result.isEmpty())
+            logger.warning("No language files found in the data folder.");
+        else
+            logger.info("Found " + result.size() + " language files in the data folder.");
+
+        return result;
+    }
+
+    public Properties loadLanguage(@NotNull String langName) throws IOException
+    {
+        if (!(this.jarLanguages.contains(langName) || this.dataFolderLanguages.contains(langName)))
+            throw new IllegalArgumentException("No such language \"" + langName + "\".");
+
+        boolean isInJar = this.jarLanguages.contains(langName);
+        if (isInJar)
+            return this.loadLanguageFromJar(langName);
+        else
+            return this.loadLanguageFromDataFolder(langName);
+    }
+
     private Properties loadLanguageFromJar(String name) throws IOException
     {
         File pluginFile = getPluginFile(this.plugin);
@@ -146,18 +160,6 @@ import java.util.zip.ZipInputStream;
 
             return loadLangIS(zipInputStream);
         }
-    }
-
-    public Properties loadLanguage(@NotNull String langName) throws IOException
-    {
-        if (!(this.jarLanguages.contains(langName) || this.dataFolderLanguages.contains(langName)))
-            throw new IllegalArgumentException("No such language \"" + langName + "\".");
-
-        boolean isInJar = this.jarLanguages.contains(langName);
-        if (isInJar)
-            return this.loadLanguageFromJar(langName);
-        else
-            return this.loadLanguageFromDataFolder(langName);
     }
 
     private Properties loadLanguageFromDataFolder(String name) throws IOException
@@ -222,7 +224,5 @@ import java.util.zip.ZipInputStream;
 
         return result;
     }
-
-
 
 }
