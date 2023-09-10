@@ -154,7 +154,7 @@ import java.util.zip.ZipInputStream;
             }
 
             if (entry == null)
-                throw new IllegalStateException("Language file \"" + name + "\" not found in the jar file.");
+                throw new IllegalStateException("Language file \"" + name + "\" was not found in the jar file.");
 
             return loadLangIS(zipInputStream);
         }
