@@ -1,9 +1,9 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
 import lombok.Getter;
-import net.kyori.adventure.audience.Audience;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,7 @@ public class PlayerTerminal extends AbstractBukkitTerminal
     }
 
     @Override
-    public @NotNull Audience getAudience()
+    public @NotNull CommandSender getSender()
     {
         return this.player;
     }
@@ -99,7 +99,7 @@ public class PlayerTerminal extends AbstractBukkitTerminal
     @Override
     public void clearNotification()
     {
-        this.player.clearTitle();
+        this.player.resetTitle();
     }
 
     /**
@@ -108,6 +108,6 @@ public class PlayerTerminal extends AbstractBukkitTerminal
     public void updatePlayer()
     {
         this.player = Bukkit.getPlayer(this.player.getUniqueId());
-        this.setAudience(this.player);
+        this.setSender(this.player);
     }
 }

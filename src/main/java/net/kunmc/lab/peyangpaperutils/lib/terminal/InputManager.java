@@ -1,12 +1,11 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -52,14 +51,14 @@ public class InputManager implements Listener
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onSay(AsyncChatEvent event)
+    public void onSay(AsyncPlayerChatEvent event)
     {
         if (!this.isInputTaskAvailable(event.getPlayer().getUniqueId()))
             return;
 
         event.setCancelled(true);
 
-        String message = ((TextComponent) event.message().asComponent()).content();
+        String message = event.getMessage();
 
         doAnswer(event.getPlayer().getUniqueId(), message);
     }

@@ -1,11 +1,11 @@
 package net.kunmc.lab.peyangpaperutils.lib.command;
 
 import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
+import net.kunmc.lab.peyangpaperutils.lib.components.Text;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.InputManager;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Question;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
 import net.kunmc.lab.peyangpaperutils.lib.utils.Utils;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -91,7 +91,7 @@ public class CommandAnswer extends CommandBase
     }
 
     @Override
-    public TextComponent getHelpOneLine()
+    public Text getHelpOneLine()
     {
         return of("質問の答えを入力します。内部で使用されるコマンドです。");
     }

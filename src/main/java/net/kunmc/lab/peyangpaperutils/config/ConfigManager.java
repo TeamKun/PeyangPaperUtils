@@ -3,6 +3,7 @@ package net.kunmc.lab.peyangpaperutils.config;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.kunmc.lab.peyangpaperutils.PeyangPaperUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -251,7 +252,7 @@ public class ConfigManager<T>
         if (this.map.containsKey(name))
             return this.map.get(name);
 
-        if (name.length() < 1)
+        if (name.isEmpty())
             return null;
 
         String prefix = isMax ? "max": "min";
@@ -287,7 +288,7 @@ public class ConfigManager<T>
             }
             catch (IllegalAccessException e)
             {
-                e.printStackTrace();
+                PeyangPaperUtils.getInstance().getPlugin().getLogger().warning("Failed to get config value: " + this.field.getName());
                 return null;
             }
         }
@@ -301,7 +302,7 @@ public class ConfigManager<T>
             }
             catch (IllegalAccessException e)
             {
-                e.printStackTrace();
+                PeyangPaperUtils.getInstance().getPlugin().getLogger().warning("Failed to set config value: " + this.field.getName());
                 return false;
             }
         }

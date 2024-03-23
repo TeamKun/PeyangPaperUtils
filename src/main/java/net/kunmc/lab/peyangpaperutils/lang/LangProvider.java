@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import net.kunmc.lab.peyangpaperutils.lib.utils.Pair;
-import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
@@ -134,28 +133,5 @@ public class LangProvider
     public static String get(String key)
     {
         return get(key, MsgArgs.ofEmpty());
-    }
-
-    /**
-     * メッセージを {@link Component} として取得します。
-     *
-     * @param key  キー
-     * @param args 引数
-     * @return メッセージ
-     */
-    public static Component getComponent(String key, MsgArgs args)
-    {
-        return Component.text(get(key, args));
-    }
-
-    /**
-     * メッセージを {@link Component} として取得します。
-     *
-     * @param key キー
-     * @return メッセージ
-     */
-    public static Component getComponent(String key)
-    {
-        return getComponent(key, MsgArgs.ofEmpty());
     }
 }

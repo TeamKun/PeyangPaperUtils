@@ -1,6 +1,5 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
@@ -128,7 +127,7 @@ class PlayerProgressbar implements Progressbar
             builder.append(color).append(this.progress).append(ChatColor.WHITE);
             if (this.suffix != null)
                 builder.append(this.suffix);
-            this.player.sendActionBar(Component.text(builder.toString()));
+            this.player.sendActionBar(builder.toString());
         }
         else if (this.type == ProgressbarType.BOSS_BAR)
         {

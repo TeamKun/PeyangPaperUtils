@@ -1,9 +1,7 @@
 package net.kunmc.lab.peyangpaperutils.lib.command;
 
+import net.kunmc.lab.peyangpaperutils.lib.components.Text;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -107,17 +105,24 @@ public abstract class CommandBase
     }
 
     /**
+     * ヘルプ用のコマンドの要約を返します。
+     *
+     * @return ヘルプ用のコマンドの要約
+     */
+    public abstract Text getHelpOneLine();
+
+    /**
      * コマンドを提案します。プレイヤはクリックして適用します。
      *
      * @param text    提案する文字列
      * @param command 提案するコマンド
      * @return テキスト
      */
-    protected static @NotNull TextComponent suggestCommand(@NotNull String text, @NotNull String command)
+    protected static @NotNull Text suggestCommand(@NotNull String text, @NotNull String command)
     {
-        return Component.text(text)
-                .clickEvent(ClickEvent.suggestCommand(command + " "))
-                .hoverEvent(Component.text(ChatColor.YELLOW + "クリックして補完！"));
+        return Text.of(text)
+                .suggestCommandOnClick(command)
+                .hoverText(ChatColor.YELLOW + "クリックして補完！");
     }
 
     /**
@@ -127,21 +132,10 @@ public abstract class CommandBase
      * @param command 提案するコマンド
      * @return テキスト
      */
-    protected static @NotNull TextComponent suggestCommand(@NotNull TextComponent text, @NotNull String command)
+    protected static @NotNull Text suggestCommand(@NotNull Text text, @NotNull String command)
     {
-        return text.clickEvent(ClickEvent.suggestCommand(command + " "))
-                .hoverEvent(Component.text(ChatColor.YELLOW + "クリックして補完！"));
-    }
-
-    /**
-     * String型の文字列をTextComponentにします。
-     *
-     * @param text 文字列
-     * @return TextComponent
-     */
-    protected static @NotNull TextComponent of(@NotNull String text)
-    {
-        return Component.text(text);
+        return text.suggestCommandOnClick(command)
+                .hoverText(ChatColor.YELLOW + "クリックして補完！");
     }
 
     /**
@@ -341,11 +335,15 @@ public abstract class CommandBase
     public abstract @Nullable String getPermission();
 
     /**
-     * ヘルプ用のコマンドの要約を返します。
+     * String型の文字列をTextComponentにします。
      *
-     * @return ヘルプ用のコマンドの要約
+     * @param text 文字列
+     * @return TextComponent
      */
-    public abstract TextComponent getHelpOneLine();
+    protected static @NotNull Text of(@NotNull String text)
+    {
+        return Text.of(text);
+    }
 
     /**
      * コマンドの引数を以下の書式で返します。

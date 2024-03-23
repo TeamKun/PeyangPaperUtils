@@ -1,8 +1,8 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
+import net.kunmc.lab.peyangpaperutils.lib.components.Text;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,9 +19,9 @@ public interface Terminal
     /**
      * ターミナルの使用者を取得します。
      *
-     * @return {@link Audience}
+     * @return {@link CommandSender}
      */
-    @NotNull Audience getAudience();
+    @NotNull CommandSender getSender();
 
     /**
      * 情報メッセージを出力します。
@@ -121,11 +121,11 @@ public interface Terminal
     void writeLine(@NotNull String message);
 
     /**
-     * コンポーネントを出力します。
+     * テキストを出力します。
      *
-     * @param component 出力するコンポーネント
+     * @param component 出力するテキスト
      */
-    void write(@NotNull Component component);
+    void write(@NotNull Text component);
 
     /**
      * Bungee API のコンポーネントを出力します。
@@ -231,9 +231,9 @@ public interface Terminal
         return new Terminal()
         {
             @Override
-            public @NotNull Audience getAudience()
+            public @NotNull CommandSender getSender()
             {
-                return Terminal.this.getAudience();
+                return Terminal.this.getSender();
             }
 
             @Override
@@ -303,7 +303,7 @@ public interface Terminal
             }
 
             @Override
-            public void write(@NotNull Component component)
+            public void write(@NotNull Text component)
             {
 
             }

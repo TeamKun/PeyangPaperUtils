@@ -1,6 +1,5 @@
 package net.kunmc.lab.peyangpaperutils.lib.terminal;
 
-import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -23,19 +22,6 @@ public class Terminals
 
     private Terminals()
     {
-    }
-
-    /**
-     * 指定された {@link Audience} のターミナルを取得します。
-     *
-     * @param audience {@link Audience}
-     * @return ターミナル
-     */
-    public static @NotNull Terminal of(@NotNull Audience audience)
-    {
-        if (audience instanceof Player)
-            return of((Player) audience);
-        return ofConsole();
     }
 
     /**
@@ -64,7 +50,9 @@ public class Terminals
      */
     public static @NotNull Terminal of(@NotNull CommandSender sender)
     {
-        return of((Audience) sender);
+        if (sender instanceof Player)
+            return of((Player) sender);
+        return ofConsole();
     }
 
     /**

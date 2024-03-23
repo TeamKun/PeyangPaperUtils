@@ -16,7 +16,7 @@ public enum QuestSoundSet implements SoundSet
     /**
      * クエストが開始したときに再生するべき音です。
      */
-    QUEST_START(Sound.BLOCK_BELL_USE, SoundCategory.BLOCKS, 0.5f, 1.0f),
+    QUEST_START(Sound.ENTITY_ENDER_DRAGON_AMBIENT, SoundCategory.BLOCKS, 0.5f, 1.0f),
     /**
      * クエストのクリテリアが達成されたときに再生するべき音です。
      */

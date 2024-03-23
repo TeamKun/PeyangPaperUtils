@@ -17,7 +17,6 @@ class ConsoleTerminal extends AbstractBukkitTerminal
     @Override
     public void write(@NotNull BaseComponent[] component)
     {
-        // noinspection deprecation
         Bukkit.getConsoleSender().spigot().sendMessage(component);
     }
 

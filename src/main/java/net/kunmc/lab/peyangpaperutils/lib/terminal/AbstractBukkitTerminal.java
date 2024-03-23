@@ -3,31 +3,56 @@ package net.kunmc.lab.peyangpaperutils.lib.terminal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
+import net.kunmc.lab.peyangpaperutils.lib.components.Text;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Method;
 
 abstract class AbstractBukkitTerminal implements Terminal
 {
-    private static final ChatColor INFO_COLOR = ChatColor.of("#36C0E3");
-    private static final ChatColor WARN_COLOR = ChatColor.of("#E3BB36");
-    private static final ChatColor ERR_COLOR = ChatColor.of("#E34736");
-    private static final ChatColor SCSS_COLOR = ChatColor.of("#4CB52B");
-    private static final ChatColor HINT_COLOR = ChatColor.of("#CCD4DB");
-
+    @Nullable
+    private static final Method mOf;
+    private static final ChatColor INFO_COLOR = ofColor("#36C0E3", ChatColor.AQUA);
+    private static final ChatColor WARN_COLOR = ofColor("#E3BB36", ChatColor.YELLOW);
+    private static final ChatColor ERR_COLOR = ofColor("#E34736", ChatColor.RED);
+    private static final ChatColor SCSS_COLOR = ofColor("#4CB52B", ChatColor.DARK_GREEN);
+    private static final ChatColor HINT_COLOR = ofColor("#CCD4DB", ChatColor.GRAY);
     @Getter
     @Setter(AccessLevel.PROTECTED)
-    private Audience audience;
+    private CommandSender sender;
+
+    static
+    {
+        Method mOf$ = null;
+        try
+        {
+            mOf$ = ChatColor.class.getDeclaredMethod("of", String.class);
+            mOf$.setAccessible(true);
+        }
+        catch (NoSuchMethodException ignored)
+        {
+        }
+
+        mOf = mOf$;
+    }
+
+    public AbstractBukkitTerminal(CommandSender sender)
+    {
+        this.sender = sender;
+        this.input = new Input(this);
+    }
     @Getter
     private final Input input;
 
-    public AbstractBukkitTerminal(Audience audience)
+    @Override
+    public void writeLine(@NotNull String message)
     {
-        this.audience = audience;
-        this.input = new Input(this);
+        write(Text.of(message));
     }
 
     /**
@@ -125,14 +150,23 @@ abstract class AbstractBukkitTerminal implements Terminal
     }
 
     @Override
-    public void writeLine(@NotNull String message)
+    public void write(@NotNull Text component)
     {
-        write(Component.text(message));
+        this.sender.spigot().sendMessage(component.asComponents());
     }
 
-    @Override
-    public void write(@NotNull Component component)
+    private static ChatColor ofColor(String hex, ChatColor def)
     {
-        this.audience.sendMessage(component);
+        if (mOf == null)
+            return def;
+
+        try
+        {
+            return (ChatColor) mOf.invoke(null, hex);
+        }
+        catch (Exception e)
+        {
+            return def;
+        }
     }
 }

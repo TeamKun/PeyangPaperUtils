@@ -1,11 +1,7 @@
 package net.kunmc.lab.peyangpaperutils.lib.command;
 
+import net.kunmc.lab.peyangpaperutils.lib.components.Text;
 import net.kunmc.lab.peyangpaperutils.lib.terminal.Terminal;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -83,13 +79,12 @@ class CommandHelp extends CommandBase
         buildHelpPage(terminal, this.pluginName, page, pageLengthMax, commands, subCommand ? args[0]: null);
     }
 
-    private void send(Terminal terminal, TextComponent helpMessage, String commandName, int space_size, String subCommand)
+    private void send(Terminal terminal, Text helpMessage, String commandName, int space_size, String subCommand)
     {
         terminal.write(suggestCommand(
                 of(ChatColor.AQUA + "/" + this.baseCommandName + " " + (subCommand != null ? subCommand + " ": "")
                         + commandName + " " + StringUtils.repeat(" ", space_size - commandName.length()) + " - ")
-                        .append(Component.text(ChatColor.DARK_AQUA.toString()))
-                        .append(helpMessage.color(NamedTextColor.DARK_AQUA)),
+                        .append(helpMessage.color(ChatColor.DARK_AQUA)),
                 "/" + this.baseCommandName + " " + (subCommand != null ? subCommand + " ": "") + commandName
         ));
     }
@@ -113,25 +108,25 @@ class CommandHelp extends CommandBase
                         )
                 );
 
-        TextComponent footer = of(ChatColor.GOLD + "-----=====");
+        Text footer = of(ChatColor.GOLD + "-----=====");
 
         if (page > 1)
-            footer = footer.append(of(ChatColor.GOLD + " [" + ChatColor.RED + "<<" + ChatColor.GOLD + "]")
-                    .clickEvent(ClickEvent.runCommand("/" + this.baseCommandName + " help " +
-                            (subcommandName == null ? "": subcommandName + " ") + (page - 1)))
-                    .hoverEvent(HoverEvent.showText(of(ChatColor.AQUA + "クリックして前のページに戻る"))));
+            footer.append(of(ChatColor.GOLD + " [" + ChatColor.RED + "<<" + ChatColor.GOLD + "]")
+                    .runCommandOnClick("/" + this.baseCommandName + " help " +
+                            (subcommandName == null ? "": subcommandName + " ") + (page - 1))
+                    .hoverText(ChatColor.AQUA + "クリックして前のページに戻る"));
         else
-            footer = footer.append(of("     "));
+            footer.append(of("     "));
 
-        footer = footer.append(of(ChatColor.GOLD + " " + pluginName + " "));
+        footer.append(of(ChatColor.GOLD + " " + pluginName + " "));
 
         if (page < pageLengthMax)
-            footer = footer.append(of(ChatColor.GOLD + "[" + ChatColor.GREEN + ">>" + ChatColor.GOLD + "] ")
-                    .clickEvent(ClickEvent.runCommand("/" + this.baseCommandName + " help " +
-                            (subcommandName == null ? "": subcommandName + " ") + (page + 1)))
-                    .hoverEvent(HoverEvent.showText(of(ChatColor.AQUA + "クリックして次のページに進む"))));
+            footer.append(of(ChatColor.GOLD + "[" + ChatColor.GREEN + ">>" + ChatColor.GOLD + "] ")
+                    .runCommandOnClick("/" + this.baseCommandName + " help " +
+                            (subcommandName == null ? "": subcommandName + " ") + (page + 1))
+                    .hoverText(of(ChatColor.AQUA + "クリックして次のページに進む")));
         else
-            footer = footer.append(of("    "));
+            footer.append(of("    "));
 
         terminal.write(footer.append(of(ChatColor.GOLD + "=====-----")));
     }
@@ -156,7 +151,7 @@ class CommandHelp extends CommandBase
     }
 
     @Override
-    public TextComponent getHelpOneLine()
+    public Text getHelpOneLine()
     {
         return of("ヘルプを表示します。");
     }

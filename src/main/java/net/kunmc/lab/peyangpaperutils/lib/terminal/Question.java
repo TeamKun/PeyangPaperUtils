@@ -5,13 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Value;
 import net.kunmc.lab.peyangpaperutils.lib.command.CommandManager;
+import net.kunmc.lab.peyangpaperutils.lib.components.Text;
 import net.kunmc.lab.peyangpaperutils.lib.utils.Utils;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +46,7 @@ public class Question
     @Getter(AccessLevel.PRIVATE)
     private QuestionResult result;
 
-    public Question(@NotNull Audience target, @NotNull String question, @NotNull Input input, QuestionAttribute... attributes)
+    public Question(@NotNull CommandSender target, @NotNull String question, @NotNull Input input, QuestionAttribute... attributes)
     {
         this.uuid = UUID.randomUUID();
         this.target = target instanceof Player ? ((Player) target).getUniqueId(): null;
@@ -227,11 +225,10 @@ public class Question
     private void printChoices(Terminal terminal, Map<String, String> choices)
     {
         choices.forEach((value, text) -> terminal.write(
-                Component.text(ChatColor.GOLD + "✵ " + ChatColor.YELLOW + value +
+                Text.of(ChatColor.GOLD + "✵ " + ChatColor.YELLOW + value +
                                 " - " + ChatColor.GREEN + text)
-                        .clickEvent(ClickEvent.runCommand(getAnswerCommand(value)))
-                        .hoverEvent(HoverEvent.showText(
-                                Component.text(ChatColor.YELLOW + "クリックして送信： " + text)))
+                        .runCommandOnClick(getAnswerCommand(value))
+                        .hoverText(ChatColor.YELLOW + "クリックして送信： " + text)
         ));
     }
 
