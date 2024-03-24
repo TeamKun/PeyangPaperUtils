@@ -68,16 +68,14 @@ BukkitRunnableの匿名クラスでタスク作るのが面倒くさい人向け
 
 ```java
   Player examplePlayer;
-  Audience exampleAudience;  // net.kyori.adventure.audience.Audience
+CommandSender sender;
   
-  Terminal terminal = Terminals.of(examplePlayer);
+  Terminal terminal = Terminals.of(this.examplePlayer);
   // or
-  Terminal terminal = Terminals.of(exampleAudience);
-  // or
-  Terminal terminal = Terminals.of(examplePlayer, exampleAudience);
+  Terminal terminal = Terminals.of(this.sender);
   // or
   Terminal terminal = Terminals.ofConsole(); 
- ```
+```
 
 #### ログ出力
 
@@ -104,7 +102,9 @@ BukkitRunnableの匿名クラスでタスク作るのが面倒くさい人向け
   progress.setSuffix(" %");
   progress.show();
   // 別スレッドで実行
-  for (int i = 0; i < 100; i++) {
+  for(
+int i;
+i< 100;i++){
       progress.setProgress(i);
       Thread.sleep(100);
   }
@@ -125,8 +125,8 @@ BukkitRunnableの匿名クラスでタスク作るのが面倒くさい人向け
 
 ```java
   Input input = terminal.getInput();
-  
-  QuestionResult result = input.showYNQuestion("Are you sure?").waitAndGetResult();
+
+QuestionResult result = this.input.showYNQuestion("Are you sure?").waitAndGetResult();
   if (result.test(QuestionAttribute.YES))
       terminal.info("Yes, it is.");
   else
@@ -320,8 +320,8 @@ class ConfigClass
       int age;
       String type;
   }
-  
-  QueryResult<Employee> result = Transaction.create(connection, "SELECT * FROM example_table WHERE id = ? AND type = ?")
+
+QueryResult<Employee> result = Transaction.create(this.connection, "SELECT * FROM example_table WHERE id = ? AND type = ?")
       .set(1, 123456)
       .set(2, "EMPLOYEE")
       .executeUpdate();
@@ -378,3 +378,26 @@ class ConfigClass
         return employee;
     });
   ```
+
+### Component API のテキスト拡張
+
+v3.0.0 より Adventure API の内部仕様を廃止した。  
+これにより, PaperMC 1.16.5 以下でも使用できるようになったとともに, 一部の機能が削除された。
+
+これには, Adventure API より提供されていた `TextComponent` も含まれるため, 同等の機能を持つ API を作成する必要があった。
+v3.0.0 より作成された `Text` は Bungeecord による Component API を拡張し、より簡単かつ高度に使用できる API を提供する。
+
+```
+Text text = Text.of("Hello, world!")
+    .color(ChatColor.AQUA)  // Component API 系および Bukkit の ChatColor に対応
+    .bold()
+    .runCommandOnClick("/say Hello, world!")  // / の有無は自動で判定し適切に追加
+    .hoverText("This is hover text.")
+    .append(Text.of("This is appended text!")
+        .hoverText(Text.of("This is appended hover text.").color(ChatColor.GRAY))
+        .color(ChatColor.RED)
+    .append("This is appended text without Text.of().")
+   
+Terminal terminal = Terminals.ofConsole();
+terminal.write(text);
+```
