@@ -4,6 +4,7 @@ net.kunmc.lab.peyangpaperutils.config
 net.kunmc.lab.peyangpaperutils.db
 net.kunmc.lab.peyangpaperutils.lang
 net.kunmc.lab.peyangpaperutils.lib.command
+net.kunmc.lab.peyangpaperutils.lib.components
 net.kunmc.lab.peyangpaperutils.lib.terminal
 net.kunmc.lab.peyangpaperutils.lib.terminal.attributes
 net.kunmc.lab.peyangpaperutils.lib.utils
