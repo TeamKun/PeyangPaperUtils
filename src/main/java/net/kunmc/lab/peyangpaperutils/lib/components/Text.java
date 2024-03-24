@@ -665,4 +665,35 @@ public class Text
     {
         return of(LangProvider.get(key, args));
     }
+
+    /**
+     * テキストが同じかどうかを判定します。
+     *
+     * @param content 比較するテキスト
+     * @return 同じかどうか
+     */
+    @Contract(value = "null -> false", pure = true)
+    public boolean isSameContent(@Nullable String content)
+    {
+        if (content == null)
+            return false;
+
+        return this.toPlainText().equals(content);
+    }
+
+    /**
+     * テキストをプレーンテキストに変換します。
+     *
+     * @return プレーンテキスト
+     */
+    @NotNull
+    public String toPlainText()
+    {
+        BaseComponent[] components = this.builder.create();
+        StringBuilder builder = new StringBuilder();
+        for (BaseComponent component : components)
+            builder.append(component.toPlainText());
+
+        return builder.toString();
+    }
 }
