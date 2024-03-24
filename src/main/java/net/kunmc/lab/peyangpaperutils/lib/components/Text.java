@@ -602,6 +602,8 @@ public class Text
     {
         if (texts.length == 0)
             return empty();
+        else if (texts.length == 1)
+            return new Text(new ComponentBuilder(texts[0]));
         else
         {
             BaseComponent first = texts[0];
@@ -622,6 +624,8 @@ public class Text
     {
         if (texts.length == 0)
             return empty();
+        else if (texts.length == 1)
+            return of(texts[0]);
         else
         {
             Text txt = of(texts[0]);
